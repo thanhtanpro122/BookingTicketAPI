@@ -10,10 +10,12 @@ namespace BookingTicket.Entities.Context
     {
         public BookingTicketContext()
         {
+            Database.Migrate();
         }
 
         public BookingTicketContext(DbContextOptions options) : base(options)
         {
+            Database.Migrate();
         }
 
         public DbSet<NguoiDung> NguoiDungs { get; set; }
