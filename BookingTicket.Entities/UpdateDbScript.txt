@@ -1,0 +1,5 @@
+﻿
+
+-- Update db:
+Add-Migration <Name>
+Update-Database
