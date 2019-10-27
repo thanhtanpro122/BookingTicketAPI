@@ -98,9 +98,9 @@ namespace BookingTicket.Api.Controllers
                 var res = nguoiDungLogic.Modify(nguoiDung);
                 if (!res)
                 {
-                    return NotFound();
+                    return Ok(new { Edit = "error" });
                 }
-                return NoContent();
+                return Ok(new { Edit = "success" });
             }
             catch (Exception e)
             {
