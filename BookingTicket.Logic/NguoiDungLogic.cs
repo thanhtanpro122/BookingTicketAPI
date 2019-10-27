@@ -110,10 +110,14 @@ namespace BookingTicket.Logic
             {
                 return false;
             }
+            if (CheckTonTai(e.SDT))
+            {
+                return false;
+            }
             nguoiDung.SDT = e.SDT;
             nguoiDung.HoTen = e.HoTen;
             nguoiDung.Email = e.Email;
-            nguoiDung.MatKhau = e.MatKhau;
+            nguoiDung.MatKhau = GetMD5(e.MatKhau);
             nguoiDung.GioiTinh = e.GioiTinh;
             nguoiDung.DiaChi = e.DiaChi;
             nguoiDung.NgaySinh = e.NgaySinh;
