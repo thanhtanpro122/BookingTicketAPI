@@ -12,6 +12,8 @@ namespace BookingTicket.Logic
 
         List<TuyenXe> GetDSTuyenXe(string diadiemdi, string diadiemden, DateTime ngayKhoiHanh);
 
+        List<TuyenXe> GetAll();
+
         List<ChoNgoiItem> GetDSChoNgoi(long maDieuHanh);
     }
 }

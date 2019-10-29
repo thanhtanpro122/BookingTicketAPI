@@ -39,6 +39,13 @@ namespace BookingTicket.Api.Controllers
             return dstuyenxe;
         }
 
+        [HttpGet("GetAllTuyenXe")]
+        public List<TuyenXe> GetALLDSTuyenXe()
+        { 
+            var dsTuyenXe = tuyenXeLogic.GetAll();
+            return dsTuyenXe;
+        }
+
         [HttpGet("dschongoi")]
         public List<ChoNgoiItem> GetDSChoNgoi(long maDieuHanh)
         {

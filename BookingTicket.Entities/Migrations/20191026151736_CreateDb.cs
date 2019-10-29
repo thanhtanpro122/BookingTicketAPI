@@ -3,34 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookingTicket.Entities.Migrations
 {
-    public partial class UpdateDb1 : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<long>(
-                name: "MaDieuHanh",
-                table: "ThongTinDatCho",
-                nullable: true,
-                oldClrType: typeof(long));
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdateTime",
-                table: "NguoiDung",
-                nullable: true,
-                oldClrType: typeof(DateTime));
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NgaySinh",
-                table: "NguoiDung",
-                nullable: true,
-                oldClrType: typeof(DateTime));
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedTime",
-                table: "NguoiDung",
-                nullable: true,
-                oldClrType: typeof(DateTime));
-
             migrationBuilder.CreateTable(
                 name: "LoaiChoNgoi",
                 columns: table => new
@@ -45,6 +21,28 @@ namespace BookingTicket.Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NguoiDung",
+                columns: table => new
+                {
+                    UserID = table.Column<long>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    SDT = table.Column<string>(type: "varchar(20)", nullable: true),
+                    MatKhau = table.Column<string>(type: "varchar(50)", nullable: true),
+                    Email = table.Column<string>(type: "varchar(50)", nullable: true),
+                    HoTen = table.Column<string>(type: "varchar(150)", nullable: true),
+                    GioiTinh = table.Column<int>(nullable: false),
+                    DiaChi = table.Column<string>(type: "varchar(1000)", nullable: true),
+                    NgaySinh = table.Column<DateTime>(nullable: true),
+                    Avatar = table.Column<string>(type: "varchar(200)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NguoiDung", x => x.UserID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TuyenXe",
                 columns: table => new
                 {
@@ -53,6 +51,7 @@ namespace BookingTicket.Entities.Migrations
                     TenTuyenXe = table.Column<string>(type: "varchar(150)", nullable: true),
                     DiaDiemDi = table.Column<string>(type: "varchar(150)", nullable: true),
                     DiaDiemDen = table.Column<string>(type: "varchar(150)", nullable: true),
+                    GiaVe = table.Column<double>(nullable: false),
                     ThoiGianKhoiHanh = table.Column<DateTime>(nullable: false),
                     ThoiGIanKetThuc = table.Column<DateTime>(nullable: false),
                     CreatedTime = table.Column<DateTime>(nullable: true),
@@ -69,6 +68,7 @@ namespace BookingTicket.Entities.Migrations
                 {
                     MaXe = table.Column<long>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
+                    TenXe = table.Column<string>(type: "varchar(150)", nullable: true),
                     HangXe = table.Column<string>(type: "varchar(150)", nullable: true),
                     BienSoXe = table.Column<string>(type: "varchar(150)", nullable: true),
                     SoLuongGhe = table.Column<int>(nullable: false),
@@ -133,12 +133,46 @@ namespace BookingTicket.Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ThongTinDatCho",
+                columns: table => new
+                {
+                    MadatCho = table.Column<long>(nullable: false)
+                        .Annotation("MySQL:AutoIncrement", true),
+                    SoLuongVe = table.Column<int>(nullable: false),
+                    HinhThucThanhToan = table.Column<int>(nullable: false),
+                    NgayDat = table.Column<DateTime>(nullable: false),
+                    HoTenNguoiDat = table.Column<string>(type: "varchar(150)", nullable: true),
+                    SDT = table.Column<string>(type: "varchar(20)", nullable: true),
+                    CMND = table.Column<string>(type: "varchar(20)", nullable: true),
+                    MaDieuHanh = table.Column<long>(nullable: true),
+                    MaKH = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ThongTinDatCho", x => x.MadatCho);
+                    table.ForeignKey(
+                        name: "FK_ThongTinDatCho_DieuHanh_MaDieuHanh",
+                        column: x => x.MaDieuHanh,
+                        principalTable: "DieuHanh",
+                        principalColumn: "MaDieuHanh",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ThongTinDatCho_NguoiDung_MaKH",
+                        column: x => x.MaKH,
+                        principalTable: "NguoiDung",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ve",
                 columns: table => new
                 {
                     MaVe = table.Column<long>(nullable: false)
                         .Annotation("MySQL:AutoIncrement", true),
                     GiaVe = table.Column<double>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
                     MaDatCho = table.Column<long>(nullable: false),
                     MaChoNgoi = table.Column<long>(nullable: true)
                 },
@@ -160,11 +194,6 @@ namespace BookingTicket.Entities.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ThongTinDatCho_MaDieuHanh",
-                table: "ThongTinDatCho",
-                column: "MaDieuHanh");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ChoNgoi_MaDieuHanh",
                 table: "ChoNgoi",
                 column: "MaDieuHanh");
@@ -180,6 +209,16 @@ namespace BookingTicket.Entities.Migrations
                 column: "MaXe");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ThongTinDatCho_MaDieuHanh",
+                table: "ThongTinDatCho",
+                column: "MaDieuHanh");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ThongTinDatCho_MaKH",
+                table: "ThongTinDatCho",
+                column: "MaKH");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ve_MaChoNgoi",
                 table: "Ve",
                 column: "MaChoNgoi");
@@ -193,22 +232,10 @@ namespace BookingTicket.Entities.Migrations
                 name: "IX_Xe_loaiChoNgoi",
                 table: "Xe",
                 column: "loaiChoNgoi");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_ThongTinDatCho_DieuHanh_MaDieuHanh",
-                table: "ThongTinDatCho",
-                column: "MaDieuHanh",
-                principalTable: "DieuHanh",
-                principalColumn: "MaDieuHanh",
-                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_ThongTinDatCho_DieuHanh_MaDieuHanh",
-                table: "ThongTinDatCho");
-
             migrationBuilder.DropTable(
                 name: "Ve");
 
@@ -216,7 +243,13 @@ namespace BookingTicket.Entities.Migrations
                 name: "ChoNgoi");
 
             migrationBuilder.DropTable(
+                name: "ThongTinDatCho");
+
+            migrationBuilder.DropTable(
                 name: "DieuHanh");
+
+            migrationBuilder.DropTable(
+                name: "NguoiDung");
 
             migrationBuilder.DropTable(
                 name: "TuyenXe");
@@ -226,38 +259,6 @@ namespace BookingTicket.Entities.Migrations
 
             migrationBuilder.DropTable(
                 name: "LoaiChoNgoi");
-
-            migrationBuilder.DropIndex(
-                name: "IX_ThongTinDatCho_MaDieuHanh",
-                table: "ThongTinDatCho");
-
-            migrationBuilder.AlterColumn<long>(
-                name: "MaDieuHanh",
-                table: "ThongTinDatCho",
-                nullable: false,
-                oldClrType: typeof(long),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "UpdateTime",
-                table: "NguoiDung",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "NgaySinh",
-                table: "NguoiDung",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldNullable: true);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "CreatedTime",
-                table: "NguoiDung",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldNullable: true);
         }
     }
 }

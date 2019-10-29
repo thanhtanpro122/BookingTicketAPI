@@ -151,10 +151,10 @@ namespace BookingTicket.Logic
             return context.NguoiDungs.Where(e => e.SDT == sdt).Count() > 0;
         }
 
-        public bool CheckUserNameAndPass(string username, string password)
+        public NguoiDung CheckUserNameAndPass(string username, string password)
         {
             var pass = GetMD5(password);
-            return context.NguoiDungs.FirstOrDefault(e => e.SDT == username && e.MatKhau == pass) != null;
+            return context.NguoiDungs.FirstOrDefault(e => e.SDT == username && e.MatKhau == pass);
         }
 
         /// <summary>

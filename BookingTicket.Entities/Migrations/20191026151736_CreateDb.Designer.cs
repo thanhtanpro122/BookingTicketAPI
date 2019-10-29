@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookingTicket.Entities.Migrations
 {
     [DbContext(typeof(BookingTicketContext))]
-    [Migration("20191021143705_updateDb7")]
-    partial class updateDb7
+    [Migration("20191026151736_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -110,6 +110,8 @@ namespace BookingTicket.Entities.Migrations
 
                     b.Property<string>("CMND")
                         .HasColumnType("varchar(20)");
+
+                    b.Property<int>("HinhThucThanhToan");
 
                     b.Property<string>("HoTenNguoiDat")
                         .HasColumnType("varchar(150)");
@@ -232,7 +234,7 @@ namespace BookingTicket.Entities.Migrations
 
             modelBuilder.Entity("BookingTicket.Entities.Models.ThongTinDatCho", b =>
                 {
-                    b.HasOne("BookingTicket.Entities.Models.DieuHanh", "dieuHanh")
+                    b.HasOne("BookingTicket.Entities.Models.DieuHanh", "DieuHanh")
                         .WithMany("DanhSachThongTinDatCho")
                         .HasForeignKey("MaDieuHanh");
 

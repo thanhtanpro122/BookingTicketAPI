@@ -125,10 +125,10 @@ namespace BookingTicket.Api.Controllers
 
 
         [HttpGet("signin")]
-        public IActionResult LoginWithUsernameAndPassword(string username, string password)
+        public IActionResult LoginWithUsernameAndPassword(string phone, string password)
         {
-            var found = nguoiDungLogic.CheckUserNameAndPass(username,password);
-            if (!found)
+            var found = nguoiDungLogic.CheckUserNameAndPass(phone,password);
+            if (found == null)
             {
                 return Ok(new UserLoginDataModel
                 {
@@ -138,11 +138,12 @@ namespace BookingTicket.Api.Controllers
 
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.MobilePhone, username)
+                new Claim(ClaimTypes.MobilePhone, phone),
+                new Claim(ClaimTypes.NameIdentifier, found.UserID.ToString())
             };
             var token = tokenManager.GenerateToken(claims);
 
-            return Ok(new UserLoginDataModel(username)
+            return Ok(new UserLoginDataModel(phone, found.UserID.ToString())
             {
                 LoginStatus = LoginStatus.Successfull,
                 Token = token
@@ -150,18 +151,19 @@ namespace BookingTicket.Api.Controllers
         }
 
         [HttpGet("validate")]
-        public IActionResult LoginWithToken(string username, string token)
+        public IActionResult LoginWithToken(string phone, string userId, string token)
         {
             bool accept;
             try
             {
-                accept = IsvalidToken(username, token);
+                accept = IsvalidToken(phone, userId, token);
             }
             catch (SecurityTokenExpiredException)
             {
                 var claims = new Claim[]
                 {
-                    new Claim(ClaimTypes.Email, username)
+                    new Claim(ClaimTypes.MobilePhone, phone),
+                    new Claim(ClaimTypes.NameIdentifier, userId)
                 };
                 var newToken = tokenManager.GenerateToken(claims);
 
@@ -178,7 +180,7 @@ namespace BookingTicket.Api.Controllers
 
             if (accept)
             {
-                return Ok(new UserLoginDataModel(username)
+                return Ok(new UserLoginDataModel(phone, userId)
                 {
                     Token = token,
                     LoginStatus = LoginStatus.Successfull
@@ -191,7 +193,7 @@ namespace BookingTicket.Api.Controllers
             });
         }
 
-        private bool IsvalidToken(string email, string token)
+        private bool IsvalidToken(string phone, string userId, string token)
         {
             try
             {
@@ -204,7 +206,9 @@ namespace BookingTicket.Api.Controllers
                 if (principal.Identity is ClaimsIdentity identity)
                 {
                     var userClaim = identity.FindFirst(ClaimTypes.MobilePhone);
-                    if (userClaim?.Value == email)
+                    var userIdClainm = identity.FindFirst(ClaimTypes.NameIdentifier);
+
+                    if (userClaim?.Value == phone && userIdClainm?.Value == userId)
                     {
                         if (securityToken != null && securityToken.ValidTo.Date < DateTime.Now.Date)
                         {

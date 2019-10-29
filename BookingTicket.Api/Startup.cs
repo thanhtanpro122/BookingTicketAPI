@@ -66,6 +66,8 @@ namespace BookingTicket.Api
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

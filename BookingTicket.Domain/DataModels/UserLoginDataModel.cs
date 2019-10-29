@@ -10,12 +10,14 @@ namespace BookingTicket.Domain.DataModels
         {
 
         }
-        public UserLoginDataModel(string username)
+        public UserLoginDataModel(string phone, string userId)
         {
-            Username = username;
+            Phone = phone;
+            UserId = userId;
         }
 
-        public string Username { get; set; }
+        public string Phone { get; set; }
+        public string UserId { get; set; }
         public string Token { get; set; }
         public LoginStatus LoginStatus { get; set; }
     }

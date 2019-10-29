@@ -29,7 +29,7 @@ namespace BookingTicket.Logic
         String GetMD5(string matkhau);
         bool CheckTonTai(string sdt);
 
-        bool CheckUserNameAndPass(string username, string password);
+        NguoiDung CheckUserNameAndPass(string username, string password);
 
         List<DSVe> GetDSVe(long userId, int status);
 

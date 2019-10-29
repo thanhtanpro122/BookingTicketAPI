@@ -30,7 +30,7 @@ namespace BookingTicket.Logic
             var tuyenXes = context.TuyenXes
                 .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.DanhSachChoNgoi)
                 .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.Xe)
-                .Where(e => e.DiaDiemDi == diadiemdi && e.DiaDiemDen == diadiemden && e.DanhSachDieuHanh.Any(i => i.NgayKhoiHanh == ngayKhoiHanh))
+                .Where(e => e.DiaDiemDi == diadiemdi && e.DiaDiemDen == diadiemden && e.DanhSachDieuHanh.Any(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date))
                 .Select(e => new TuyenXe
                 {
                     DiaDiemDen = e.DiaDiemDen,
@@ -40,10 +40,10 @@ namespace BookingTicket.Logic
                     MaTuyenXe= e.MaTuyenXe,
                     ThoiGIanKetThuc= e.ThoiGIanKetThuc,
                     ThoiGianKhoiHanh= e.ThoiGianKhoiHanh,
-                    TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh == ngayKhoiHanh).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
-                    MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh == ngayKhoiHanh).MaDieuHanh,
-                    MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh == ngayKhoiHanh).Xe.MaXe,
-                    TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh == ngayKhoiHanh).Xe.TenXe
+                    TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
+                    MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).MaDieuHanh,
+                    MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).Xe.MaXe,
+                    TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).Xe.TenXe
                 })
                 .ToList();
             return tuyenXes;
@@ -59,6 +59,30 @@ namespace BookingTicket.Logic
                     MaDieuHanh = e.MaDieuHanh ?? -1
                 }).ToList();
             return choNgois;
+        }
+
+        public List<TuyenXe> GetAll()
+        {
+            var tuyenXes = context.TuyenXes
+                .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.DanhSachChoNgoi)
+                .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.Xe)
+                .Where(e => e.DanhSachDieuHanh.Any(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)))
+                .Select(e => new TuyenXe
+                {
+                    DiaDiemDen = e.DiaDiemDen,
+                    DiaDiemDi = e.DiaDiemDi,
+                    NgayKhoiHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).NgayKhoiHanh.Date,
+                    GiaVe = e.GiaVe,
+                    MaTuyenXe = e.MaTuyenXe,
+                    ThoiGIanKetThuc = e.ThoiGIanKetThuc,
+                    ThoiGianKhoiHanh = e.ThoiGianKhoiHanh,
+                    TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
+                    MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).MaDieuHanh,
+                    MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.MaXe,
+                    TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.TenXe
+                })
+                .ToList();
+            return tuyenXes;
         }
     }
 }
