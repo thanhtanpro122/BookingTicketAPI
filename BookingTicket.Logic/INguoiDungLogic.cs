@@ -34,5 +34,6 @@ namespace BookingTicket.Logic
         List<DSVe> GetDSVe(long userId, int status);
 
         bool DatVe(DatVe datVe);
+      
     }
 }

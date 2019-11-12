@@ -55,19 +55,21 @@ namespace BookingTicket.Api
                 await context.Database.MigrateAsync();
             }
 
+            app.UseHttpsRedirection();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                  name: "areas",
-                  template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                routes.MapAreaRoute(
+                  name: "areas_DashBoard",
+                  areaName: "Admin",
+                  template: "{area:exists}/{controller=DashBoard}/{action=Index}/{id?}"
                 );
             });
 
 
-            app.UseHttpsRedirection();
-            app.UseMvc();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            
         }
     }
 }

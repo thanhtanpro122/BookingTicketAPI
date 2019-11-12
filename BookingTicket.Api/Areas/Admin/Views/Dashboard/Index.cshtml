@@ -1,0 +1,85 @@
+﻿
+@{
+    Layout = "~/Areas/Admin/Views/_Shared/_Layout.cshtml";
+
+    ViewData["Title"] = "DashBoard";
+    ViewData["Page"] = "DashBoard";
+}
+
+
+<div class="row">
+    <div class="col-lg-3 grid-margin d-flex align-items-stretch">
+        <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+                <!--card statistics-->
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="mr-auto">
+                                <h1 class="mb-0">1200</h1>
+                                <p>
+                                    Ngày
+                                </p>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="mdi mdi-account-switch mdi-36px"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--card statistics-->
+            </div>
+            <div class="col-12 grid-margin stretch-card">
+                <!--card statistics-->
+                <div class="card bg-danger text-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="mr-auto">
+                                <h1 class="mb-0">15234</h1>
+                                <p>
+                                    Tháng
+                                </p>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="mdi mdi-clipboard-text mdi-36px"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--card statistics-->
+            </div>
+            <div class="col-12 grid-margin stretch-card">
+                <!--card statistics-->
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="mr-auto">
+                                <h1 class="mb-0">105412</h1>
+                                <p>
+                                    Quý
+                                </p>
+                            </div>
+                            <div class="ml-auto">
+                                <i class="mdi mdi-cube-outline mdi-36px"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--card statistics-->
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9 grid-margin stretch-card">
+        <!--business survey chart-->
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Thống kê</h4>
+                <canvas id="business-survey-chart" height="210"></canvas>
+            </div>
+        </div>
+        <!--business survey chart ends-->
+    </div>
+</div>
+
+
+

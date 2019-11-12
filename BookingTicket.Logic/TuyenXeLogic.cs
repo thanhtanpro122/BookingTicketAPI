@@ -35,7 +35,7 @@ namespace BookingTicket.Logic
                 {
                     DiaDiemDen = e.DiaDiemDen,
                     DiaDiemDi = e.DiaDiemDi,
-                    NgayKhoiHanh = ngayKhoiHanh,
+                    NgayKhoiHanh = ngayKhoiHanh.Date,
                     GiaVe = e.GiaVe,
                     MaTuyenXe= e.MaTuyenXe,
                     ThoiGIanKetThuc= e.ThoiGIanKetThuc,
@@ -79,7 +79,7 @@ namespace BookingTicket.Logic
                     TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
                     MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).MaDieuHanh,
                     MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.MaXe,
-                    TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.TenXe
+                    TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.BienSoXe
                 })
                 .ToList();
             return tuyenXes;

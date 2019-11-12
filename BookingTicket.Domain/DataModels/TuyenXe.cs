@@ -9,9 +9,10 @@ namespace BookingTicket.Domain.ViewModels
         public long MaTuyenXe { get; set; }
         public string DiaDiemDi { get; set; }
         public string DiaDiemDen { get; set; }
-        public DateTime ThoiGianKhoiHanh { get; set; }
-        public DateTime ThoiGIanKetThuc { get; set; }
+        public string ThoiGianKhoiHanh { get; set; }
+        public string ThoiGIanKetThuc { get; set; }
         public int TinhTrang { get; set; }
+        public int TongGhe { get; set; }
         public long MaDieuHanh { get; set; }
         public DateTime NgayKhoiHanh { get; set; }
         public double GiaVe { get; set; }

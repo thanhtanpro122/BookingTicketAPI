@@ -1,0 +1,78 @@
+﻿@model BookingTicket.Entities.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>NguoiDung</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.SDT)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SDT)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MatKhau)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MatKhau)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HoTen)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HoTen)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.GioiTinh)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.GioiTinh)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaChi)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DiaChi)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NgaySinh)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NgaySinh)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Avatar)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Avatar)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UpdateTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UpdateTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.UserID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -8,8 +8,8 @@ namespace BookingTicket.Domain.DataModels
     {
         public string DiaDiemDi { get; set; }
         public string DiaDiemDen { get; set; }
-        public DateTime ThoiGianKhoiHanh { get; set; }
-        public DateTime ThoiGianKetThuc { get; set; }
+        public string ThoiGianKhoiHanh { get; set; }
+        public string ThoiGianKetThuc { get; set; }
         public DateTime NgayDat { get; set; }
         public DateTime NgayHuy { get; set; }
         public double GiaVe { get; set; }

@@ -1,0 +1,71 @@
+﻿@model BookingTicket.Entities.Models.NguoiDung
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<div class="row grid-margin">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">EDIT USER</h2>
+                <form asp-area="Admin" asp-controller="NguoiDungs" asp-action="Edit" class="forms-sample">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="UserID" />
+                    <div class="form-group">
+                        <label for="exampleInputName1">Họ tên</label>
+                        <input asp-for="HoTen" type="text" class="form-control">
+                        <span asp-validation-for="HoTen" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Số điện thoại</label>
+                        <input readonly asp-for="SDT" type="text" class="form-control">
+                        <span asp-validation-for="SDT" class="text-danger"></span>
+                    </div>
+                    @*<div class="form-group">
+                        <label for="exampleInputPassword4">Mật khẩu</label>
+                        <input asp-for="MatKhau" type="password" class="form-control">
+                        <span asp-validation-for="MatKhau" class="text-danger"></span>
+                    </div>*@
+                    <div class="form-group">
+                        <label for="exampleInputEmail3">Email</label>
+                        <input readonly asp-for="Email" type="email" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Địa chỉ</label>
+                        <input asp-for="DiaChi" type="text" class="form-control">
+                        <span asp-validation-for="DiaChi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Giới tính</label>
+                        <select asp-for="GioiTinh" class="form-control span6 m-wrap" name="txt-gioi-tinh" style="width:500px !important;">
+                            <option value="1">Nam</option>
+                            <option value="0">Nữ</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Ngày Sinh</label>
+                        <input asp-for="NgaySinh" type="date" class="form-control" style="width:500px !important;">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CreatedTime" class="control-label"></label>
+                        <input readonly asp-for="CreatedTime" class="form-control" style="width:500px !important;" />
+                        <span asp-validation-for="CreatedTime" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success mr-2">Submit</button>
+                    <button class="btn btn-light">Cancel</button>
+                </form>
+                <div style="text-align: right;">
+                    <a asp-action="Index">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

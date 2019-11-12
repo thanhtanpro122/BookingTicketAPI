@@ -1,0 +1,265 @@
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@using X.PagedList.Mvc.Common
+@model IPagedList<BookingTicket.Domain.ViewModels.TuyenXe>
+
+@{
+    Layout = "~/Areas/Admin/Views/_Shared/_Layout.cshtml";
+
+    ViewData["Title"] = "DieuHanh";
+    ViewData["Page"] = "DieuHanh";
+}
+
+
+<div class="row grid-margin">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Điều Hành Xe</h2>
+                <div class="table-toolbar">
+                    <div style="padding-bottom: 4rem;">
+                        <div style="float:left;">
+                            <a asp-area="Admin" asp-controller="DieuHanh" asp-action="Create">
+                                <button class="btn btn-success" data-toggle="modal"
+                                        data-target="#CreateModal">
+                                    Thêm mới <i class="icon-plus icon-white"></i>
+                                </button>
+                            </a>
+                        </div>
+                        <div style="float:right;">
+                            @using (Html.BeginForm("Index", "DieuHanh", FormMethod.Post))
+                            {
+                                <input type="text" id="tuyenxe" name="tuyenxe" placeholder="Tuyến xe" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
+                                <input type="text" id="xe" name="xe" placeholder="Xe" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
+                                <input type="date" id="ngaykhoihanh" name="ngaykhoihanh" value="@ViewBag.ngaykhoihanh" class="form-control" style="width: auto; display: inline-block" />
+                                <button type="submit" id="btnTimKiem" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span> Search
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã điều hành</th>
+                            <th>Ngày khởi hành</th>
+                            <th>Tuyến xe</th>
+                            <th>Thời gian chạy</th>
+                            <th>Xe</th>
+                            <th>Chỗ ngồi</th>
+                            <th width="150">Chỉnh sửa</th>
+                            <th width="85">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var tuyen = item.DiaDiemDi + "->" + item.DiaDiemDen;
+                            var thoigian = item.ThoiGianKhoiHanh + "-" + item.ThoiGIanKetThuc;
+
+                            <tr>
+                                <td>@item.MaDieuHanh</td>
+                                <td>@item.NgayKhoiHanh</td>
+                                <td>@tuyen</td>
+                                <td>@thoigian</td>
+                                <td>@item.TenXe</td>
+                                <td>
+                                    <a href="#" data-toggle="modal" data-target="#ChoNgoiModal">
+                                        @item.TinhTrang / @item.TongGhe
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-primary" data-toggle="modal"
+                                       data-target="#EditModal">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+                <div style="float:right;padding-top: 25px;">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @(Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" },
+                            UlElementClasses = new string[] { "pagination rounded-flat pagination-success" }
+                        }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<!-- Create modal -->
+<div class="modal fade" id="CreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Điều hành</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputName1">Ngày khởi hành</label>
+                    <input class="form-control" type="datetime-local" id="example-datetime-local-input">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputName1">Chọn tuyến xe</label>
+                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Chọn tuyến xe">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword4">Chọn xe</label>
+                    <input type="text" class="form-control" id="exampleInputPassword4" placeholder="Chọn xe">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit modal -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa thông tin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="exampleInputName1">Ngày khởi hành</label>
+                    <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00"
+                           id="example-datetime-local-input">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputName1">Chọn tuyến xe</label>
+                    <input type="text" class="form-control" id="exampleInputName1" value="Hồ Chí Minh -> Cà Mau">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword4">Chọn xe</label>
+                    <input type="text" class="form-control" id="exampleInputPassword4" value="69B-05345">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- DieuHanhXe -->
+<div class="modal fade" id="ChoNgoiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chỗ ngồi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card" style="background-color:#F6F8FA;">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs tab-basic" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                   aria-controls="home" aria-selected="true">Tầng 1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                                   aria-controls="profile" aria-selected="false">Tầng 2</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content tab-content-basic">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                 aria-labelledby="home-tab">
+                                <table style="width:100%;margin-left: 13px;">
+                                    <tr>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A1"></td>
+                                        <td></td>
+                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A7"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A13"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A2"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A8"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A14"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A3"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A9"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A15"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A4"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A10"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A16"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A5"></td>
+                                        <td></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A11"></td>
+                                        <td></td>
+                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A17"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A6"></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A19"></td>
+                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A12"></td>
+                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A20"></td>
+                                        <td><input style="width: 45px;height: 40px;" type="button" value="A18"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
+                            </div>
+                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">Save Change</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--END Modal -->
+
+

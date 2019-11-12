@@ -1,0 +1,110 @@
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@using X.PagedList.Mvc.Common
+@model IPagedList<BookingTicket.Entities.Models.NguoiDung>
+
+@{
+
+    ViewData["Title"] = "NguoiDung";
+    ViewData["Page"] = "NguoiDung";
+}
+
+<div class="row grid-margin">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Thông tin người dùng</h4>
+                <div class="table-toolbar">
+                    <div>
+                        <div style="float:left;">
+                            <a asp-area="Admin" asp-controller="NguoiDungs" asp-action="Create">
+                                <button class="btn btn-success">
+                                    Thêm mới <i class="icon-plus icon-white"></i>
+                                </button>
+                            </a>
+                        </div>
+                        <div style="float:right;">
+                            @using (Html.BeginForm("Index", "NguoiDungs", FormMethod.Post))
+                            {
+                                <input type="text" id="searchString" name="searchString" placeholder="Tìm kiếm" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
+                                <button type="submit" id="btnTimKiem" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span> Search
+                                </button>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Họ tên</th>
+                            <th>SDT</th>
+                            <th>Địa chỉ</th>
+                            <th>Email</th>
+                            <th width="150">Chỉnh sửa</th>
+                            <th width="85">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.HoTen)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SDT)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DiaChi)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="NguoiDungs" asp-action="Edit" asp-route-id="@item.UserID" class="btn btn-primary">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="NguoiDungs" asp-action="Delete" asp-route-id="@item.UserID" class="btn btn-danger delete_user">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div style="float:right;padding-top: 25px;">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @(Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" },
+                            UlElementClasses = new string[] { "pagination rounded-flat pagination-success" }
+                        }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        $('.delete_user').click(function (e) {
+            var result = confirm("Want to delete?");
+            if (!result) {
+                e.preventDefault();
+            }
+        });
+    </script>
+}
+
+
+

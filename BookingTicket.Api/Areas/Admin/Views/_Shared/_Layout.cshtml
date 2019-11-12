@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin</title>
+    <link href="~/css/mdi/css/materialdesignicons.min.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container-scroller">
+        <!-- partial:partials/_navbar.html -->
+        <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+                <a class="navbar-brand brand-logo" href="/Admin/DashBoard"><img src="~/image/admin.svg" alt="logo" /></a>
+                <a class="navbar-brand brand-logo-mini" href="/Admin/DashBoard"><img src="~/image/admin.svg" alt="logo" /></a>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-stretch">
+                <button class="navbar-toggler navbar-toggler align-self-center mr-2" type="button" data-toggle="minimize">
+                    <i class="mdi mdi-menu"></i>
+                </button>
+                <ul class="navbar-nav navbar-nav-right ml-lg-auto">
+                    <li class="nav-item nav-search">
+                        <form class="nav-link form-inline mt-2 mt-md-0 d-none d-lg-flex">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search">
+                                <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="mdi mdi-magnify"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="nav-item  nav-profile dropdown">
+                        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown">
+                            <img src="~/image/faces-clipart/pic-1.png" />
+                            <span class="profile-name">Dieu Pham</span>
+                        </a>
+                        <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
+                            <a class="dropdown-item" href="#">
+                                <i class="mdi mdi-cached mr-2 text-success"></i>
+                                Activity Log
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="mdi mdi-logout mr-2 text-primary"></i>
+                                Signout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                        data-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_sidebar.html -->
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
+                    <li class="nav-item @((string)ViewData["Page"] == "DashBoard" ? "active" : "")">
+                        <a class="nav-link" href="/Admin/DashBoard">
+                            <i class="mdi mdi-compass-outline menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @((string)ViewData["Page"] == "NguoiDung" ? "active" : "")">
+                        <a class="nav-link" href="/Admin/NguoiDungs">
+                            <i class="mdi mdi-account-search menu-icon"></i>
+                            <span class="menu-title">Người dùng</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @((string)ViewData["Page"] == "DatVe" ? "active" : "")">
+                        <a class="nav-link active" href="/Admin/ThongTinDatVe">
+                            <i class="mdi mdi-file-document-box menu-icon"></i>
+                            <span class="menu-title">Thông tin đặt vé</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @((string)ViewData["Page"] == "DieuHanh" ? "active" : "")">
+                        <a class="nav-link" href="/Admin/DieuHanh">
+                            <i class="mdi mdi-speedometer menu-icon"></i>
+                            <span class="menu-title">Điều hành xe</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @((string)ViewData["Page"] == "Tuyen" ? "active" : "")">
+                        <a class="nav-link" href="/Admin/TuyenXe">
+                            <i class="mdi mdi-swap-horizontal menu-icon"></i>
+                            <span class="menu-title">Quản lí tuyến</span>
+                        </a>
+                    </li>
+                    <li class="nav-item @((string)ViewData["Page"] == "Xe" ? "active" : "")">
+                        <a class="nav-link" href="/Admin/Xe">
+                            <i class="mdi mdi-car menu-icon"></i>
+                            <span class="menu-title">Quản lí Xe</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    @RenderBody()
+                </div>
+                <!-- partial:partials/_footer.html -->
+                <footer class="footer">
+                    <div class="container-fluid clearfix">
+                        <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">
+                            Copyright © 2018 <a href="#">Bootstrapdash</a>. All rights reserved.
+                        </span>
+                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">
+                            Hand-crafted & made
+                            with <i class="mdi mdi-heart text-danger"></i>
+                        </span>
+                    </div>
+                </footer>
+                <!-- partial -->
+            </div>
+            
+            <!-- main-panel ends -->
+        </div>
+
+    </div>
+
+    <script src="~/js/jquery/dist/jquery.min.js"></script>
+    @RenderSection("scripts", required: false);
+    <script src="~/js/dashboard.js"></script>
+    <script src="~/js/misc.js"></script>
+    <script src="~/js/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+</html>

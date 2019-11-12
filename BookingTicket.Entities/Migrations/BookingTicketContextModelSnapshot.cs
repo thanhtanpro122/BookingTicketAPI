@@ -152,9 +152,9 @@ namespace BookingTicket.Entities.Migrations
                     b.Property<string>("TenTuyenXe")
                         .HasColumnType("varchar(150)");
 
-                    b.Property<DateTime>("ThoiGIanKetThuc");
+                    b.Property<string>("ThoiGIanKetThuc");
 
-                    b.Property<DateTime>("ThoiGianKhoiHanh");
+                    b.Property<string>("ThoiGianKhoiHanh");
 
                     b.Property<DateTime?>("UpdateTime");
 

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -101,7 +102,7 @@ namespace BookingTicket.Logic
                 str += b.ToString("X2");
             }
             return str;
-        }
+        }       
 
         public bool Modify(NguoiDung e)
         {
@@ -129,13 +130,15 @@ namespace BookingTicket.Logic
 
         public bool Register(string sdt, string email, string matkhau)
         {
+            var createTime = DateTime.Now;
             try
             {
                 var nguoiDung = new NguoiDung
                 {
                     SDT = sdt,
                     Email = email,
-                    MatKhau = GetMD5(matkhau)
+                    MatKhau = GetMD5(matkhau),
+                    CreatedTime = createTime
                 };
                 context.Add(nguoiDung);
                 context.SaveChanges();

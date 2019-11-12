@@ -28,8 +28,8 @@ namespace BookingTicket.Entities.Models
 
         public double GiaVe { get; set; }
 
-        public DateTime ThoiGianKhoiHanh { get; set; }
-        public DateTime ThoiGIanKetThuc { get; set; }
+        public string ThoiGianKhoiHanh { get; set; }
+        public string ThoiGIanKetThuc { get; set; }
 
         public DateTime? CreatedTime { get; set; }
 
