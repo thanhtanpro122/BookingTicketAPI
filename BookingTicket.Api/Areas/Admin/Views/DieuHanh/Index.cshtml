@@ -9,7 +9,10 @@
     ViewData["Title"] = "DieuHanh";
     ViewData["Page"] = "DieuHanh";
 }
-
+@*<link href="~/css/icheck/skins/all.css" rel="stylesheet" />
+    <link href="~/css/select2/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="~/css/select2-bootstrap-theme/dist/select2-bootstrap.min.css" rel="stylesheet" />*@
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <div class="row grid-margin">
     <div class="col-12">
@@ -19,7 +22,7 @@
                 <div class="table-toolbar">
                     <div style="padding-bottom: 4rem;">
                         <div style="float:left;">
-                            <a asp-area="Admin" asp-controller="DieuHanh" asp-action="Create">
+                            <a>
                                 <button class="btn btn-success" data-toggle="modal"
                                         data-target="#CreateModal">
                                     Thêm mới <i class="icon-plus icon-white"></i>
@@ -29,9 +32,12 @@
                         <div style="float:right;">
                             @using (Html.BeginForm("Index", "DieuHanh", FormMethod.Post))
                             {
-                                <input type="text" id="tuyenxe" name="tuyenxe" placeholder="Tuyến xe" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
-                                <input type="text" id="xe" name="xe" placeholder="Xe" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
-                                <input type="date" id="ngaykhoihanh" name="ngaykhoihanh" value="@ViewBag.ngaykhoihanh" class="form-control" style="width: auto; display: inline-block" />
+                                <input type="text" id="tuyenxe" name="tuyenxe" placeholder="Tuyến xe" class="form-control" style="width: auto; display: inline-block" />
+                                <input type="text" id="matuyenxe" name="matuyenxe" hidden />
+                                @*<select asp-items="ViewBag.TuyenXe" class="js-example-basic-multiple form-control" multiple="multiple" style="width: auto !important;"></select>*@
+                                <input type="text" id="xe" name="xe" placeholder="Xe" class="form-control" style="width: auto; display: inline-block" />
+                                <input type="text" id="maxe" name="maxe" hidden />
+                                <input id="ngaykhoihanh" name="ngaykhoihanh" placeholder="Ngày khởi hành" class="form-control" style="width: auto; display: inline-block" />
                                 <button type="submit" id="btnTimKiem" class="btn btn-default">
                                     <span class="glyphicon glyphicon-search"></span> Search
                                 </button>
@@ -56,7 +62,7 @@
                         @foreach (var item in Model)
                         {
                             var tuyen = item.DiaDiemDi + "->" + item.DiaDiemDen;
-                            var thoigian = item.ThoiGianKhoiHanh + "-" + item.ThoiGIanKetThuc;
+                            var thoigian = item.ThoiGianKhoiHanh + "-" + item.ThoiGianKetThuc;
 
                             <tr>
                                 <td>@item.MaDieuHanh</td>
@@ -65,20 +71,20 @@
                                 <td>@thoigian</td>
                                 <td>@item.TenXe</td>
                                 <td>
-                                    <a href="#" data-toggle="modal" data-target="#ChoNgoiModal">
+                                    <a href="#" class="chongoi" data-id="@item.MaDieuHanh" data-toggle="modal" data-target="#ChoNgoiModal">
                                         @item.TinhTrang / @item.TongGhe
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-primary" data-toggle="modal"
+                                    <a class="btn btn-primary edit-dieuhanh" data-id="@item.MaDieuHanh" data-toggle="modal"
                                        data-target="#EditModal">
                                         Edit
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger">
+                                    <a asp-area="Admin" asp-controller="DieuHanh" asp-action="Delete" asp-route-id="@item.MaDieuHanh" class="btn btn-danger delete_dieuhanh">
                                         Delete
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -112,24 +118,30 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="exampleInputName1">Ngày khởi hành</label>
-                    <input class="form-control" type="datetime-local" id="example-datetime-local-input">
+            @using (Html.BeginForm("Create", "DieuHanh", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="exampleInputName1">Ngày khởi hành</label>
+                        <input class="form-control" id="NgayKhoiHanh" name="NgayKhoiHanh">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Chọn tuyến xe</label>
+                        <input type="text" id="MaTuyenXe" name="MaTuyenXe" />
+                        <input type="text" class="form-control" id="tuyenxe-create" name="tuyenxe" placeholder="Chọn tuyến xe">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword4">Chọn xe</label>
+                        <input type="text" id="MaXe" name="MaXe" />
+                        <input type="text" class="form-control" id="xe-create" name="xe" placeholder="Chọn xe">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputName1">Chọn tuyến xe</label>
-                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Chọn tuyến xe">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Create</button>
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword4">Chọn xe</label>
-                    <input type="text" class="form-control" id="exampleInputPassword4" placeholder="Chọn xe">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Create</button>
-            </div>
+            }
+
         </div>
     </div>
 </div>
@@ -145,25 +157,31 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="exampleInputName1">Ngày khởi hành</label>
-                    <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00"
-                           id="example-datetime-local-input">
+            @using (Html.BeginForm("Edit", "DieuHanh", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <input type="text" id="MaDieuHanh" name="MaDieuHanh" />
+                    <div class="form-group">
+                        <label for="exampleInputName1">Ngày khởi hành</label>
+                        <input class="form-control" id="NgayKhoiHanh_Edit" name="NgayKhoiHanh">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Chọn tuyến xe</label>
+                        <input type="text" id="MaTuyenXe" name="MaTuyenXe" />
+                        <input type="text" class="form-control" id="tuyenxe-edit" name="tuyenxe">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword4">Chọn xe</label>
+                        <input type="text" id="MaXe" name="MaXe" />
+                        <input type="text" class="form-control" id="xe-edit" name="xe">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputName1">Chọn tuyến xe</label>
-                    <input type="text" class="form-control" id="exampleInputName1" value="Hồ Chí Minh -> Cà Mau">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Save changes</button>
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword4">Chọn xe</label>
-                    <input type="text" class="form-control" id="exampleInputPassword4" value="69B-05345">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save changes</button>
-            </div>
+            }
+
         </div>
     </div>
 </div>
@@ -182,72 +200,8 @@
             </div>
             <div class="modal-body">
                 <div class="card" style="background-color:#F6F8FA;">
-                    <div class="card-body">
-                        <ul class="nav nav-tabs tab-basic" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                                   aria-controls="home" aria-selected="true">Tầng 1</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                                   aria-controls="profile" aria-selected="false">Tầng 2</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content tab-content-basic">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel"
-                                 aria-labelledby="home-tab">
-                                <table style="width:100%;margin-left: 13px;">
-                                    <tr>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A1"></td>
-                                        <td></td>
-                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A7"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A13"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A2"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A8"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A14"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A3"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A9"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A15"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A4"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A10"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A16"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A5"></td>
-                                        <td></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A11"></td>
-                                        <td></td>
-                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A17"></td>
-                                    </tr>
-                                    <tr>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A6"></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A19"></td>
-                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A12"></td>
-                                        <td><input class="btn-success" style="width: 45px;height: 40px;" type="button" value="A20"></td>
-                                        <td><input style="width: 45px;height: 40px;" type="button" value="A18"></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                    <div class="card-body dschongoi_partial">
 
-                            </div>
-                            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -263,3 +217,183 @@
 <!--END Modal -->
 
 
+@section scripts{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+        var getSuggestionTuyenXe = function () {
+            $.ajax({
+                url: "/Admin/DieuHanh/GetListTuyenXe",
+                data: {
+                    "name": ""
+                },
+                type: "GET",
+                contentType: "json",
+                success: function (data) {
+                    console.log(data)
+                    items = [];
+                    map = [];
+                    $.each(data, function (i, item) {
+                        var id = item.maTuyenXe;
+                        var diadiem = item.diaDiem;
+                        map.push({
+                            id: id,
+                            name: diadiem
+                        });
+                    });
+                    // response(items);
+                    $("#tuyenxe").autocomplete({
+                        source: map.map(r => r.name),
+                        select: function (event, ui) {
+                            var selection = ui.item.label;
+                            $("#tuyenxe").val(selection);
+                            $("#matuyenxe").val(
+                                map[map.map(r => r.name).indexOf(selection)].id
+                            );
+                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            return false;
+                        }
+                    });
+                    $("#tuyenxe-create").autocomplete({
+                        source: map.map(r => r.name),
+                        select: function (event, ui) {
+                            var selection = ui.item.label;
+                            $("#tuyenxe-create").val(selection);
+                            $("#MaTuyenXe").val(
+                                map[map.map(r => r.name).indexOf(selection)].id
+                            );
+                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            return false;
+                        }
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                    console.log("errror");
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                    console.log("EEE");
+                }
+            });
+        }();
+
+        var getSuggestionXe = function () {
+            $.ajax({
+                url: "/Admin/DieuHanh/GetListXe",
+                data: {},
+                type: "GET",
+                contentType: "json",
+                success: function (data) {
+                    console.log(data)
+                    items = [];
+                    map = [];
+                    $.each(data, function (i, item) {
+                        var id = item.maXe;
+                        var xe = item.bienSoXe;
+                        map.push({
+                            id: id,
+                            name: xe
+                        });
+                    });
+                    $("#xe").autocomplete({
+                        source: map.map(r => r.name),
+                        select: function (event, ui) {
+                            var selection = ui.item.label;
+                            $("#xe").val(selection);
+                            $("#maxe").val(
+                                map[map.map(r => r.name).indexOf(selection)].id
+                            );
+                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            return false;
+                        }
+                    });
+                    $("#xe-create").autocomplete({
+                        source: map.map(r => r.name),
+                        select: function (event, ui) {
+                            var selection = ui.item.label;
+                            $("#xe-create").val(selection);
+                            $("#MaXe").val(
+                                map[map.map(r => r.name).indexOf(selection)].id
+                            );
+                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            return false;
+                        }
+                    });
+                },
+                error: function (response) {
+                    alert(response.responseText);
+                    console.log(response)
+                },
+                failure: function (response) {
+                    alert(response.responseText);
+                    console.log(response);
+                }
+            });
+        }();
+
+        $(document).ready(function () {
+            $(".chongoi").click(function () {
+                $.ajax({
+                    url: "/Admin/DieuHanh/GetListChoNgoiById",
+                    data: {
+                        id: $(this).data("id")
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (data) {
+                        $(".dschongoi_partial").html(data);
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            });
+
+
+            $(".edit-dieuhanh").click(function (e) {
+                $.ajax({
+                    url: "/Admin/DieuHanh/Edit",
+                    data: {
+                        id: $(this).data("id")
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $("#MaDieuHanh").val(data[0].maDieuHanh);
+                        $("#tuyenxe-edit").val(data[0].diaDiem);
+                        $("#xe-edit").val(data[0].tenXe);
+                        $("#NgayKhoiHanh_Edit").val(data[0].ngayKhoiHanh);
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            });
+
+            $('.delete_dieuhanh').click(function (e) {
+                var result = confirm("Want to delete?");
+                if (!result) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#NgayKhoiHanh").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
+            });
+            $("#NgayKhoiHanh_Edit").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
+            });
+            $("#ngaykhoihanh").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
+            });
+        });
+    </script>
+}

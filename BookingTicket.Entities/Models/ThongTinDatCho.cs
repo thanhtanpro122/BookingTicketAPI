@@ -16,7 +16,7 @@ namespace BookingTicket.Entities.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long MadatCho { get; set; }
+        public long MaDatCho { get; set; }
 
         public int SoLuongVe { get; set; }
 

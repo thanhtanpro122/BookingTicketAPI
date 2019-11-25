@@ -56,7 +56,7 @@ namespace BookingTicket.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != thongTinDatCho.MadatCho)
+            if (id != thongTinDatCho.MaDatCho)
             {
                 return BadRequest();
             }
@@ -94,7 +94,7 @@ namespace BookingTicket.Api.Controllers
             _context.ThongTinDatChos.Add(thongTinDatCho);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetThongTinDatCho", new { id = thongTinDatCho.MadatCho }, thongTinDatCho);
+            return CreatedAtAction("GetThongTinDatCho", new { id = thongTinDatCho.MaDatCho }, thongTinDatCho);
         }
 
         // DELETE: api/ThongTinDatCho/5
@@ -120,7 +120,7 @@ namespace BookingTicket.Api.Controllers
 
         private bool ThongTinDatChoExists(long id)
         {
-            return _context.ThongTinDatChos.Any(e => e.MadatCho == id);
+            return _context.ThongTinDatChos.Any(e => e.MaDatCho == id);
         }
     }
 }

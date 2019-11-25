@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,6 +26,7 @@ namespace BookingTicket.Entities.Models
         public int SoLuongGhe { get; set; }
 
         [ForeignKey("loaiChoNgoi")]
+        [JsonProperty("loaiCho")]
         public long loaiChoNgoi { get; set; }
 
         public virtual LoaiChoNgoi LoaiChoNgoi { get; set; }

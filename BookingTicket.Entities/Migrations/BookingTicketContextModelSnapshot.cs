@@ -25,6 +25,8 @@ namespace BookingTicket.Entities.Migrations
 
                     b.Property<int>("TinhTrang");
 
+                    b.Property<int>("ViTriChoNgoi");
+
                     b.HasKey("MaChoNgoi");
 
                     b.HasIndex("MaDieuHanh");
@@ -37,11 +39,17 @@ namespace BookingTicket.Entities.Migrations
                     b.Property<long>("MaDieuHanh")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime?>("CreatedTime");
+
                     b.Property<long?>("MaTuyenXe");
 
                     b.Property<long?>("MaXe");
 
                     b.Property<DateTime>("NgayKhoiHanh");
+
+                    b.Property<int>("Status");
+
+                    b.Property<DateTime?>("UpdateTime");
 
                     b.HasKey("MaDieuHanh");
 
@@ -103,7 +111,7 @@ namespace BookingTicket.Entities.Migrations
 
             modelBuilder.Entity("BookingTicket.Entities.Models.ThongTinDatCho", b =>
                 {
-                    b.Property<long>("MadatCho")
+                    b.Property<long>("MaDatCho")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("CMND")
@@ -125,7 +133,7 @@ namespace BookingTicket.Entities.Migrations
 
                     b.Property<int>("SoLuongVe");
 
-                    b.HasKey("MadatCho");
+                    b.HasKey("MaDatCho");
 
                     b.HasIndex("MaDieuHanh");
 
@@ -152,9 +160,11 @@ namespace BookingTicket.Entities.Migrations
                     b.Property<string>("TenTuyenXe")
                         .HasColumnType("varchar(150)");
 
-                    b.Property<string>("ThoiGIanKetThuc");
+                    b.Property<DateTime>("ThoiGianKetThuc")
+                        .HasColumnType("datetime");
 
-                    b.Property<string>("ThoiGianKhoiHanh");
+                    b.Property<DateTime>("ThoiGianKhoiHanh")
+                        .HasColumnType("datetime");
 
                     b.Property<DateTime?>("UpdateTime");
 

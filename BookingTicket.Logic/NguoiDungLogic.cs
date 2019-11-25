@@ -176,16 +176,23 @@ namespace BookingTicket.Logic
                 .Include(e => e.ThongtinDatCho)
                 .ThenInclude(e => e.DieuHanh)
                 .ThenInclude(e => e.TuyenXe)
+                .Include(e => e.ThongtinDatCho)
+                .ThenInclude(e => e.DieuHanh)
+                .ThenInclude(e=>e.Xe)
+                .ThenInclude(e=>e.LoaiChoNgoi)
                 .Where(e => e.Status == status && e.ThongtinDatCho.MaKH == userId)
                 .Select(e => new DSVe
                 {
+                    MaVe = e.MaVe,
                     DiaDiemDen = e.ThongtinDatCho.DieuHanh.TuyenXe.DiaDiemDen,
                     DiaDiemDi = e.ThongtinDatCho.DieuHanh.TuyenXe.DiaDiemDi,
                     GiaVe = e.GiaVe,
                     NgayDat = e.ThongtinDatCho.NgayDat,
                     NgayHuy = e.UpdateTime,
-                    ThoiGianKetThuc = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGIanKetThuc,
-                    ThoiGianKhoiHanh = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGianKhoiHanh
+                    ThoiGianKetThuc = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGianKetThuc.ToString("hh:mm"),
+                    ThoiGianKhoiHanh = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGianKhoiHanh.ToString("hh:mm"),
+                    NgayKhoiHanh = e.ThongtinDatCho.DieuHanh.NgayKhoiHanh.Date.ToString(),
+                    LoaiChoNgoi = e.ThongtinDatCho.DieuHanh.Xe.LoaiChoNgoi.TenLoaiChoNgoi
                 })
                 .ToList();
 
@@ -214,7 +221,7 @@ namespace BookingTicket.Logic
                     var ve = new Ve
                     {
                         GiaVe = datVe.GiaVe,
-                        MaDatCho = thongtindatcho.MadatCho,
+                        MaDatCho = thongtindatcho.MaDatCho,
                         Status = 0,
                         MaChoNgoi = item
                     };

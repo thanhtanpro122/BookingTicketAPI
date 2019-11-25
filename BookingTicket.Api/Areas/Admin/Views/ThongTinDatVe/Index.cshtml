@@ -1,7 +1,8 @@
-﻿
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@using X.PagedList.Mvc.Common
+@model IPagedList<BookingTicket.Entities.Models.ThongTinDatCho>
 @{
-    Layout = "~/Areas/Admin/Views/_Shared/_Layout.cshtml";
-
     ViewData["Title"] = "ThongTinDatVe";
     ViewData["Page"] = "DatVe";
 }
@@ -13,16 +14,14 @@
                 <h4 class="card-title">Thông tin đặt vé</h4>
                 <div class="table-toolbar">
                     <div>
-                        <!-- <div style="float:left;">
-                            <a href="/Admin/TMNguoiDung">
-                                <button class="btn btn-success">Thêm mới <i
-                                        class="icon-plus icon-white"></i>
-                                </button>
-                            </a>
-                        </div> -->
                         <div style="float:right;">
-                            <input style="width: 250px;" placeholder="Search" id="myInput"
-                                   type="text" class="form-control" aria-controls="example2">
+                            @using (Html.BeginForm("Index", "ThongTinDatVe", FormMethod.Post))
+                            {
+                                <input type="text" id="searchString" name="searchString" placeholder="Tìm kiếm" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
+                                <button type="submit" id="btnTimKiem" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span> Search
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -39,136 +38,50 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>0123456789</td>
-                            <td>2 vé</td>
-                            <td>28/09/2019</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>0123456789</td>
-                            <td>2 vé</td>
-                            <td>28/09/2019</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>0123456789</td>
-                            <td>2 vé</td>
-                            <td>28/09/2019</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>0123456789</td>
-                            <td>2 vé</td>
-                            <td>28/09/2019</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>0123456789</td>
-                            <td>2 vé</td>
-                            <td>28/09/2019</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>0123456789</td>
-                            <td>2 vé</td>
-                            <td>28/09/2019</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.MaDatCho</td>
+                                <td>@item.HoTenNguoiDat</td>
+                                <td>@item.SDT</td>
+                                <td>@item.SoLuongVe</td>
+                                <td>@item.NgayDat</td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="ThongTinDatVe" asp-action="Edit" asp-route-id="@item.MaDatCho" class="btn btn-primary">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="ThongTinDatVe" asp-action="Delete" asp-route-id="@item.MaDatCho" class="btn btn-danger delete_infodatcho">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
                 <div style="float:right;padding-top: 25px;">
-                    <nav aria-label="Page navigation example ">
-                        <ul class="pagination rounded-flat">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">5</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @(Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" },
+                            UlElementClasses = new string[] { "pagination rounded-flat pagination-success" }
+                        }))
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
+@section scripts{
+    <script>
+        $('.delete_infodatcho').click(function (e) {
+            var result = confirm("Want to delete?");
+            if (!result) {
+                e.preventDefault();
+            }
+        });
+    </script>
+}

@@ -22,6 +22,8 @@ namespace BookingTicket.Entities.Models
         [ForeignKey("DieuHanh")]
         public long? MaDieuHanh { get; set; }
 
+        public int ViTriChoNgoi { get; set; }
+
         public virtual ICollection<Ve> DanhSachChoNgoi { get; set; }
 
         public virtual DieuHanh DieuHanh { get; set; }

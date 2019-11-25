@@ -8,6 +8,10 @@
     <title>Admin</title>
     <link href="~/css/mdi/css/materialdesignicons.min.css" rel="stylesheet" />
     <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/css/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="~/js/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <div class="container-scroller">
@@ -119,16 +123,20 @@
                 </footer>
                 <!-- partial -->
             </div>
-            
+
             <!-- main-panel ends -->
         </div>
 
     </div>
 
     <script src="~/js/jquery/dist/jquery.min.js"></script>
-    @RenderSection("scripts", required: false);
+    <script src="~/js/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="~/js/dashboard.js"></script>
     <script src="~/js/misc.js"></script>
-    <script src="~/js/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="~/js/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="~/js/moment/min/moment.min.js"></script>
+    <script src="~/css/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js"></script>
+    @RenderSection("scripts", required: false);
 </body>
 </html>

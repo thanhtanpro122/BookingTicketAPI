@@ -26,6 +26,11 @@ namespace BookingTicket.Entities.Models
         [ForeignKey("Xe")]
         public long? MaXe { get; set; }
 
+        public int Status { get; set; }
+        public DateTime? CreatedTime { get; set; }
+
+        public DateTime? UpdateTime { get; set; }
+
         public virtual TuyenXe TuyenXe { get; set; }
         public virtual Xe Xe { get; set; }
 

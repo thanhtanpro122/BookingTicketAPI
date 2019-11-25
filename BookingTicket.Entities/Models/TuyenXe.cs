@@ -26,10 +26,15 @@ namespace BookingTicket.Entities.Models
         [Column(TypeName = "varchar(150)")]
         public string DiaDiemDen { get; set; }
 
+        public string DiaDiem => DiaDiemDi + "->" + DiaDiemDen;
+
         public double GiaVe { get; set; }
 
-        public string ThoiGianKhoiHanh { get; set; }
-        public string ThoiGIanKetThuc { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime ThoiGianKhoiHanh { get; set; }
+
+        [Column(TypeName = "datetime")]
+        public DateTime ThoiGianKetThuc { get; set; }
 
         public DateTime? CreatedTime { get; set; }
 

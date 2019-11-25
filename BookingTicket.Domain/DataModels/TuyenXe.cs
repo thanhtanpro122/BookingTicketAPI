@@ -10,7 +10,7 @@ namespace BookingTicket.Domain.ViewModels
         public string DiaDiemDi { get; set; }
         public string DiaDiemDen { get; set; }
         public string ThoiGianKhoiHanh { get; set; }
-        public string ThoiGIanKetThuc { get; set; }
+        public string ThoiGianKetThuc { get; set; }
         public int TinhTrang { get; set; }
         public int TongGhe { get; set; }
         public long MaDieuHanh { get; set; }
@@ -18,6 +18,7 @@ namespace BookingTicket.Domain.ViewModels
         public double GiaVe { get; set; }
         public long MaXe { get; set; }
         public string TenXe { get; set; }
+        public string LoaiChoNgoi { get; set; }
         public List<ChoNgoiItem> ChoNgoi { get; set; }
     }
     public class ChoNgoiItem
