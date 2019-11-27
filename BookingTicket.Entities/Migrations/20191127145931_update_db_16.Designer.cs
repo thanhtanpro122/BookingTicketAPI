@@ -3,14 +3,16 @@ using System;
 using BookingTicket.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingTicket.Entities.Migrations
 {
     [DbContext(typeof(BookingTicketContext))]
-    partial class BookingTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20191127145931_update_db_16")]
+    partial class update_db_16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +26,10 @@ namespace BookingTicket.Entities.Migrations
                     b.Property<int>("IsSuperAdmin");
 
                     b.Property<string>("MatKhau")
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("varchar(30)");
+                        .HasColumnType("varchar(20)");
 
                     b.HasKey("AdminID");
 

@@ -30,11 +30,9 @@ namespace BookingTicket.Entities.Models
 
         public double GiaVe { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime ThoiGianKhoiHanh { get; set; }
+        public TimeSpan ThoiGianKhoiHanh { get; set; }
 
-        [Column(TypeName = "datetime")]
-        public DateTime ThoiGianKetThuc { get; set; }
+        public TimeSpan ThoiGianKetThuc { get; set; }
 
         public DateTime? CreatedTime { get; set; }
 

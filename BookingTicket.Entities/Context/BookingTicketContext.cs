@@ -26,5 +26,6 @@ namespace BookingTicket.Entities.Context
         public DbSet<Ve> Ves { get; set; }
         public DbSet<Xe> Xes { get; set; }
         public DbSet<LoaiChoNgoi> LoaiChoNgois { get; set; }
+        public DbSet<Admin> Admins { get; set; }
     }
 }

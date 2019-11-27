@@ -3,36 +3,20 @@ using System;
 using BookingTicket.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingTicket.Entities.Migrations
 {
     [DbContext(typeof(BookingTicketContext))]
-    partial class BookingTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20191127145506_update_db_15")]
+    partial class update_db_15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.11-servicing-32099");
-
-            modelBuilder.Entity("BookingTicket.Entities.Models.Admin", b =>
-                {
-                    b.Property<long>("AdminID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("IsSuperAdmin");
-
-                    b.Property<string>("MatKhau")
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("varchar(30)");
-
-                    b.HasKey("AdminID");
-
-                    b.ToTable("Admin");
-                });
 
             modelBuilder.Entity("BookingTicket.Entities.Models.ChoNgoi", b =>
                 {

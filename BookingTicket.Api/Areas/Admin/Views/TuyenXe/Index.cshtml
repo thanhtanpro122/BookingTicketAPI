@@ -45,22 +45,22 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            var thoigian = item.ThoiGianKhoiHanh + "-" + item.ThoiGianKetThuc;
+                            var thoigian = item.ThoiGianKhoiHanh.ToString(@"hh\:mm") + "-" + item.ThoiGianKetThuc.ToString(@"hh\:mm");
                             <tr>
                                 <td>@item.MaTuyenXe</td>
                                 <td>@item.TenTuyenXe</td>
                                 <td>@item.DiaDiem</td>
                                 <td>@thoigian</td>
                                 <td>
-                                    <a href="#" class="btn btn-primary" data-toggle="modal"
+                                    <a href="#" class="btn btn-primary edit-tuyenxe" data-id="@item.MaTuyenXe" data-toggle="modal" 
                                        data-target="#EditModal">
                                         Edit
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger">
+                                    <a asp-area="Admin" asp-controller="TuyenXe" asp-action="Delete" asp-route-id="@item.MaTuyenXe" class="btn btn-danger delete_tuyenxe">
                                         Delete
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -117,7 +117,7 @@
                         <label for="ThoiGianKhoiHanh">Giờ đi</label>
                         <div class="input-group date" id="ThoiGianKhoiHanh_Create" data-target-input="nearest">
                             <div class="input-group" data-target="#ThoiGianKhoiHanh_Create" data-toggle="datetimepicker">
-                                <input type="text" id="ThoiGianKhoiHanh" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#ThoiGianKhoiHanh_Create" />
+                                <input type="text" id="ThoiGianKhoiHanh" name="ThoiGianKhoiHanh" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#ThoiGianKhoiHanh_Create" />
                                 <div class="input-group-addon input-group-append"><i class="mdi mdi-clock input-group-text"></i></div>
                             </div>
                         </div>
@@ -126,7 +126,7 @@
                         <label for="ThoiGianKetThuc">Giờ đến</label>
                         <div class="input-group date" id="ThoiGianKetThuc_Create" data-target-input="nearest">
                             <div class="input-group" data-target="#ThoiGianKetThuc_Create" data-toggle="datetimepicker">
-                                <input type="text" id="ThoiGianKetThuc" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#ThoiGianKetThuc_Create" />
+                                <input type="text" id="ThoiGianKetThuc" name="ThoiGianKetThuc" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#ThoiGianKetThuc_Create" />
                                 <div class="input-group-addon input-group-append"><i class="mdi mdi-clock input-group-text"></i></div>
                             </div>
                         </div>
@@ -134,7 +134,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Create</button>
+                    <button type="submit" class="test btn btn-success">Create</button>
                 </div>
             }
         </div>
@@ -153,45 +153,50 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="exampleInputName1">Tên tuyến</label>
-                    <input class="form-control" type="text" id="example-datetime-local-input" value="MN1"
-                           placeholder="Chọn hãng xe">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputName1">Địa điểm đi</label>
-                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Địa điểm đi"
-                           value="Hồ Chí Minh">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputName1">Địa điểm điến</label>
-                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Địa điểm đến"
-                           value="Cà Mau">
-                </div>
-                @*<div class="form-group">
-                        <label for="exampleInputName11">Giờ đến</label>
-                        <div class="input-group date" id="timepicker-example11" data-target-input="nearest">
-                            <div class="input-group" data-target="#timepicker-example11" data-toggle="datetimepicker">
-                                <input type="text" id="exampleInputName11" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#timepicker-example11" />
+            @using (Html.BeginForm("Edit", "TuyenXe", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <input type="text" id="MaTuyenXe" name="MaTuyenXe" hidden />
+                    <div class="form-group">
+                        <label for="TenTuyenXe_Edit">Tên tuyến</label>
+                        <input class="form-control" type="text" id="TenTuyenXe_Edit" name="TenTuyenXe">
+                    </div>
+                    <div class="form-group">
+                        <label for="DiaDiemDi_Edit">Địa điểm đi</label>
+                        <input type="text" class="form-control" id="DiaDiemDi_Edit" name="DiaDiemDi">
+                    </div>
+                    <div class="form-group">
+                        <label for="DiaDiemDen_Edit">Địa điểm điến</label>
+                        <input type="text" class="form-control" id="DiaDiemDen_Edit" name="DiaDiemDen">
+                    </div>
+                    <div class="form-group">
+                        <label for="GiaVe_Edit">Giá vé</label>
+                        <input type="text" class="form-control" id="GiaVe_Edit" name="GiaVe" placeholder="Giá vé">
+                    </div>
+                    <div class="form-group">
+                        <label for="ThoiGianKhoiHanh_Edit">Giờ đi</label>
+                        <div class="input-group date" id="TGKhoiHanh_Edit" data-target-input="nearest">
+                            <div class="input-group" data-target="#TGKhoiHanh_Edit" data-toggle="datetimepicker">
+                                <input type="text" id="ThoiGianKhoiHanh_Edit" name="ThoiGianKhoiHanh" class="form-control datetimepicker-input" data-target="#TGKhoiHanh_Edit" />
                                 <div class="input-group-addon input-group-append"><i class="mdi mdi-clock input-group-text"></i></div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Giờ đến</label>
-                        <div class="input-group date" id="timepicker-example" data-target-input="nearest">
-                            <div class="input-group" data-target="#timepicker-example" data-toggle="datetimepicker">
-                                <input type="text" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#timepicker-example" />
+                        <label for="ThoiGianKetThuc_Edit">Giờ đến</label>
+                        <div class="input-group date" id="TGKetThuc_Edit" data-target-input="nearest">
+                            <div class="input-group" data-target="#TGKetThuc_Edit" data-toggle="datetimepicker">
+                                <input type="text" id="ThoiGianKetThuc_Edit" name="ThoiGianKetThuc" class="form-control datetimepicker-input" data-target="#TGKetThuc_Edit" />
                                 <div class="input-group-addon input-group-append"><i class="mdi mdi-clock input-group-text"></i></div>
                             </div>
                         </div>
-                    </div>*@
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save change</button>
-            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="test btn btn-success">Edit</button>
+                </div>
+            }
         </div>
     </div>
 </div>
@@ -201,11 +206,55 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#ThoiGianKhoiHanh_Create').datetimepicker({
-                format: 'LT'
+                format: 'LT',
+                format: 'HH:mm'
             });
 
             $('#ThoiGianKetThuc_Create').datetimepicker({
-                format: 'LT'
+                format: 'LT',
+                format: 'HH:mm'
+            });
+
+            $('#TGKhoiHanh_Edit').datetimepicker({
+                format: 'LT',
+                format: 'HH:mm'
+            });
+
+            $('#TGKetThuc_Edit').datetimepicker({
+                format: 'LT',
+                format: 'HH:mm'
+            });
+
+            $(".edit-tuyenxe").click(function (e) {
+                $.ajax({
+                    url: "/Admin/TuyenXe/Edit",
+                    data: {
+                        id: $(e.target).data("id")
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $("#MaTuyenXe").val(data.maTuyenXe);
+                        $("#TenTuyenXe_Edit").val(data.tenTuyenXe);
+                        $("#DiaDiemDi_Edit").val(data.diaDiemDi);
+                        $("#DiaDiemDen_Edit").val(data.diaDiemDen);
+                        $("#GiaVe_Edit").val(data.giaVe);
+                        $("#ThoiGianKhoiHanh_Edit").val(data.thoiGianKhoiHanh);
+                        $("#ThoiGianKetThuc_Edit").val(data.thoiGianKetThuc);
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            });
+
+
+            $('.delete_tuyenxe').click(function (e) {
+                var result = confirm("Want to delete?");
+                if (!result) {
+                    e.preventDefault();
+                }
             });
         });
     </script>

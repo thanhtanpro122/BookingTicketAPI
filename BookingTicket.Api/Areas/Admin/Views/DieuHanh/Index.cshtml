@@ -12,6 +12,11 @@
 @*<link href="~/css/icheck/skins/all.css" rel="stylesheet" />
     <link href="~/css/select2/dist/css/select2.min.css" rel="stylesheet" />
     <link href="~/css/select2-bootstrap-theme/dist/select2-bootstrap.min.css" rel="stylesheet" />*@
+<style>
+    .ui-autocomplete.ui-front {
+        z-index: 2147483647 !important;
+    }
+</style>
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <div class="row grid-margin">
@@ -34,7 +39,7 @@
                             {
                                 <input type="text" id="tuyenxe" name="tuyenxe" placeholder="Tuyến xe" class="form-control" style="width: auto; display: inline-block" />
                                 <input type="text" id="matuyenxe" name="matuyenxe" hidden />
-                                @*<select asp-items="ViewBag.TuyenXe" class="js-example-basic-multiple form-control" multiple="multiple" style="width: auto !important;"></select>*@
+
                                 <input type="text" id="xe" name="xe" placeholder="Xe" class="form-control" style="width: auto; display: inline-block" />
                                 <input type="text" id="maxe" name="maxe" hidden />
                                 <input id="ngaykhoihanh" name="ngaykhoihanh" placeholder="Ngày khởi hành" class="form-control" style="width: auto; display: inline-block" />
@@ -76,8 +81,7 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary edit-dieuhanh" data-id="@item.MaDieuHanh" data-toggle="modal"
-                                       data-target="#EditModal">
+                                    <a class="btn btn-primary edit-dieuhanh" data-id="@item.MaDieuHanh">
                                         Edit
                                     </a>
                                 </td>
@@ -106,6 +110,9 @@
     </div>
 </div>
 
+<!--Loader-->
+    
+<!--End Loader-->
 <!-- Modal -->
 <!-- Create modal -->
 <div class="modal fade" id="CreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -127,12 +134,12 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Chọn tuyến xe</label>
-                        <input type="text" id="MaTuyenXe" name="MaTuyenXe" />
+                        <input type="text" id="MaTuyenXe-Create" name="MaTuyenXe" />
                         <input type="text" class="form-control" id="tuyenxe-create" name="tuyenxe" placeholder="Chọn tuyến xe">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword4">Chọn xe</label>
-                        <input type="text" id="MaXe" name="MaXe" />
+                        <input type="text" id="MaXe-Create" name="MaXe" />
                         <input type="text" class="form-control" id="xe-create" name="xe" placeholder="Chọn xe">
                     </div>
                 </div>
@@ -167,12 +174,12 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Chọn tuyến xe</label>
-                        <input type="text" id="MaTuyenXe" name="MaTuyenXe" />
+                        <input type="text" id="MaTuyenXe-Edit" name="MaTuyenXe" class="matuyenxe-edit" />
                         <input type="text" class="form-control" id="tuyenxe-edit" name="tuyenxe">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword4">Chọn xe</label>
-                        <input type="text" id="MaXe" name="MaXe" />
+                        <input type="text" id="MaXe-Edit" name="MaXe" class="maxe-edit" />
                         <input type="text" class="form-control" id="xe-edit" name="xe">
                     </div>
                 </div>
@@ -185,7 +192,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- DieuHanhXe -->
 <div class="modal fade" id="ChoNgoiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -232,40 +238,52 @@
                 success: function (data) {
                     console.log(data)
                     items = [];
-                    map = [];
+                    tuyenxe = [];
                     $.each(data, function (i, item) {
                         var id = item.maTuyenXe;
                         var diadiem = item.diaDiem;
-                        map.push({
+                        tuyenxe.push({
                             id: id,
                             name: diadiem
                         });
                     });
                     // response(items);
                     $("#tuyenxe").autocomplete({
-                        source: map.map(r => r.name),
+                        source: tuyenxe.map(r => r.name),
                         select: function (event, ui) {
                             var selection = ui.item.label;
                             $("#tuyenxe").val(selection);
                             $("#matuyenxe").val(
-                                map[map.map(r => r.name).indexOf(selection)].id
+                                tuyenxe[tuyenxe.map(r => r.name).indexOf(selection)].id
                             );
-                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            console.log(tuyenxe[tuyenxe.map(r => r.name).indexOf(selection)].id)
                             return false;
                         }
-                    });
+                    }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
                     $("#tuyenxe-create").autocomplete({
-                        source: map.map(r => r.name),
+                        source: tuyenxe.map(r => r.name),
                         select: function (event, ui) {
                             var selection = ui.item.label;
                             $("#tuyenxe-create").val(selection);
-                            $("#MaTuyenXe").val(
-                                map[map.map(r => r.name).indexOf(selection)].id
+                            $("#MaTuyenXe-Create").val(
+                                tuyenxe[tuyenxe.map(r => r.name).indexOf(selection)].id
                             );
-                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            console.log(tuyenxe[tuyenxe.map(r => r.name).indexOf(selection)].id)
                             return false;
                         }
-                    });
+                    }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
+                    $("#tuyenxe-edit").autocomplete({
+                        source: tuyenxe.map(r => r.name),
+                        select: function (event, ui) {
+                            var selection = ui.item.label;
+                            $("#tuyenxe-edit").val(selection);
+                            $("#MaTuyenXe-Edit").val(
+                                tuyenxe[tuyenxe.map(r => r.name).indexOf(selection)].id
+                            );
+                            console.log(tuyenxe[tuyenxe.map(r => r.name).indexOf(selection)].id)
+                            return false;
+                        }
+                    }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
                 },
                 error: function (response) {
                     alert(response.responseText);
@@ -287,39 +305,51 @@
                 success: function (data) {
                     console.log(data)
                     items = [];
-                    map = [];
+                    bienso = [];
                     $.each(data, function (i, item) {
                         var id = item.maXe;
                         var xe = item.bienSoXe;
-                        map.push({
+                        bienso.push({
                             id: id,
                             name: xe
                         });
                     });
                     $("#xe").autocomplete({
-                        source: map.map(r => r.name),
+                        source: bienso.map(r => r.name),
                         select: function (event, ui) {
                             var selection = ui.item.label;
                             $("#xe").val(selection);
                             $("#maxe").val(
-                                map[map.map(r => r.name).indexOf(selection)].id
+                                bienso[bienso.map(r => r.name).indexOf(selection)].id
                             );
-                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            console.log(bienso[bienso.map(r => r.name).indexOf(selection)].id)
                             return false;
                         }
-                    });
+                    }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
                     $("#xe-create").autocomplete({
-                        source: map.map(r => r.name),
+                        source: bienso.map(r => r.name),
                         select: function (event, ui) {
                             var selection = ui.item.label;
                             $("#xe-create").val(selection);
-                            $("#MaXe").val(
-                                map[map.map(r => r.name).indexOf(selection)].id
+                            $("#MaXe-Create").val(
+                                bienso[bienso.map(r => r.name).indexOf(selection)].id
                             );
-                            console.log(map[map.map(r => r.name).indexOf(selection)].id)
+                            console.log(bienso[bienso.map(r => r.name).indexOf(selection)].id)
                             return false;
                         }
-                    });
+                    }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
+                    $("#xe-edit").autocomplete({
+                        source: bienso.map(r => r.name),
+                        select: function (event, ui) {
+                            var selection = ui.item.label;
+                            $("#xe-edit").val(selection);
+                            $("#MaXe-Edit").val(
+                                bienso[bienso.map(r => r.name).indexOf(selection)].id
+                            );
+                            console.log(bienso[bienso.map(r => r.name).indexOf(selection)].id)
+                            return false;
+                        }
+                    }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
                 },
                 error: function (response) {
                     alert(response.responseText);
@@ -350,7 +380,6 @@
                 });
             });
 
-
             $(".edit-dieuhanh").click(function (e) {
                 $.ajax({
                     url: "/Admin/DieuHanh/Edit",
@@ -359,12 +388,20 @@
                     },
                     type: "GET",
                     contentType: "json",
+                    beforeSend: function () {
+                    },
+                    complete: function () {
+                    },
                     success: function (data) {
                         console.log(data);
                         $("#MaDieuHanh").val(data[0].maDieuHanh);
+                        $(".matuyenxe-edit").val(data[0].maTuyenXe);
+                        $(".maxe-edit").val(data[0].maXe);
                         $("#tuyenxe-edit").val(data[0].diaDiem);
                         $("#xe-edit").val(data[0].tenXe);
                         $("#NgayKhoiHanh_Edit").val(data[0].ngayKhoiHanh);
+
+                        $("#EditModal").modal("show");
                     },
                     error: function (response) {
                         console.log(response)

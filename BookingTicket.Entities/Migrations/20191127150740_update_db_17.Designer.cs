@@ -3,14 +3,16 @@ using System;
 using BookingTicket.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingTicket.Entities.Migrations
 {
     [DbContext(typeof(BookingTicketContext))]
-    partial class BookingTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20191127150740_update_db_17")]
+    partial class update_db_17
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

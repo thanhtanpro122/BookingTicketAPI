@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookingTicket.Api.Areas.Admin.Filters;
 using BookingTicket.Domain.DataModels;
 using BookingTicket.Domain.ViewModels;
 using BookingTicket.Entities.Context;
@@ -15,6 +16,7 @@ using X.PagedList;
 namespace BookingTicket.Api.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AuthorizeLogin]
     public class DieuHanhController : Controller
     {
         private readonly BookingTicketContext _context;
@@ -27,11 +29,6 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
         public IActionResult Index(long? matuyenxe, long? maxe, DateTime ngaykhoihanh, int? page)
         {
-            var tuyenxe = _context.TuyenXes.ToList();
-            ViewBag.TuyenXe = new SelectList(tuyenxe, "MaTuyenXe", "DiaDiem");
-
-
-            ViewBag.ngaykhoihanh = ngaykhoihanh;
             var dieuhanhs = _context.DieuHanhs
                 .Include(e => e.Xe)
                 .Include(e => e.TuyenXe)
@@ -43,8 +40,8 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
                     NgayKhoiHanh = e.NgayKhoiHanh,
                     GiaVe = e.TuyenXe.GiaVe,
                     MaTuyenXe = e.TuyenXe.MaTuyenXe,
-                    ThoiGianKetThuc = e.TuyenXe.ThoiGianKetThuc.ToString("hh:mm"),
-                    ThoiGianKhoiHanh = e.TuyenXe.ThoiGianKhoiHanh.ToString("hh:mm"),
+                    ThoiGianKetThuc = e.TuyenXe.ThoiGianKetThuc.ToString(@"hh\:mm"),
+                    ThoiGianKhoiHanh = e.TuyenXe.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
                     TinhTrang = e.DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
                     TongGhe = e.DanhSachChoNgoi.Count(),
                     MaDieuHanh = e.MaDieuHanh,

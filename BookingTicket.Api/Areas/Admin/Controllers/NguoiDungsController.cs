@@ -9,10 +9,12 @@ using BookingTicket.Entities.Context;
 using BookingTicket.Entities.Models;
 using X.PagedList;
 using BookingTicket.Logic;
+using BookingTicket.Api.Areas.Admin.Filters;
 
 namespace BookingTicket.Api.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AuthorizeLogin]
     public class NguoiDungsController : Controller
     {
         private readonly BookingTicketContext _context;

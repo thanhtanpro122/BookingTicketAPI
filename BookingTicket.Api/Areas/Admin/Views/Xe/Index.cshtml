@@ -1,7 +1,8 @@
-﻿
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@using X.PagedList.Mvc.Common
+@model IPagedList<BookingTicket.Entities.Models.Xe>
 @{
-    Layout = "~/Areas/Admin/Views/_Shared/_Layout.cshtml";
-
     ViewData["Title"] = "Xe";
     ViewData["Page"] = "Xe";
 }
@@ -20,15 +21,20 @@
                             </button>
                         </div>
                         <div style="float:right;">
-                            <input style="width: 250px;" placeholder="Search" id="myInput"
-                                   type="text" class="form-control" aria-controls="example2">
+                            @using (Html.BeginForm("Index", "Xe", FormMethod.Post))
+                            {
+                                <input type="text" id="searchString" name="searchString" placeholder="Tìm kiếm" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
+                                <button type="submit" id="btnTimKiem" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span> Search
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Mã Xe</th>
                             <th>Hãng Xe</th>
                             <th>Biển số xe</th>
                             <th>Số lượng ghế</th>
@@ -38,133 +44,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Toyota</td>
-                            <td>59B-05345</td>
-                            <td>30</td>
-                            <td>Ghế cứng</td>
-                            <td>
-                                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#EditModal">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Toyota</td>
-                            <td>59B-05345</td>
-                            <td>30</td>
-                            <td>Ghế cứng</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Toyota</td>
-                            <td>59B-05345</td>
-                            <td>30</td>
-                            <td>Ghế cứng</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Toyota</td>
-                            <td>59B-05345</td>
-                            <td>30</td>
-                            <td>Ghế cứng</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Toyota</td>
-                            <td>59B-05345</td>
-                            <td>30</td>
-                            <td>Ghế cứng</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Toyota</td>
-                            <td>59B-05345</td>
-                            <td>30</td>
-                            <td>Ghế cứng</td>
-                            <td>
-                                <a href="#" class="btn btn-primary">
-                                    Edit
-                                </a>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger">
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>
-
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.MaXe</td>
+                                <td>@item.HangXe</td>
+                                <td>@item.BienSoXe</td>
+                                <td>@item.SoLuongGhe</td>
+                                <td>@item.LoaiChoNgoi.TenLoaiChoNgoi</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary edit-xe" data-id="@item.MaXe" data-toggle="modal" data-target="#EditModal">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Xe" asp-action="Delete" asp-route-id="@item.MaXe" class="btn btn-danger delete_xe">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
                 <div style="float:right;padding-top: 25px;">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination  rounded-flat">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">4</a></li>
-                            <li class="page-item"><a class="page-link" href="#">5</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @(Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" },
+                            UlElementClasses = new string[] { "pagination rounded-flat pagination-success" }
+                        }))
                 </div>
             </div>
         </div>
@@ -184,46 +93,45 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="exampleInputName1">Hãng Xe</label>
-                    <input class="form-control" type="text" id="example-datetime-local-input"
-                           placeholder="Chọn hãng xe">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputName1">Biển số xe</label>
-                    <input type="text" class="form-control" id="exampleInputName1" placeholder="Biển số xe">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword4">Số lượng ghế</label>
-                    <input type="text" class="form-control" id="exampleInputPassword4" placeholder="Số lượng ghế">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword4">Loại chỗ ngồi</label>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Chọn loại ghế
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Ghế cứng</a>
-                            <a class="dropdown-item" href="#">Ghế mềm</a>
-                            <a class="dropdown-item" href="#">Giường nằm</a>
+            @using (Html.BeginForm("Create", "Xe", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TenXe">Tên Xe</label>
+                        <input class="form-control" type="text" id="TenXe" name="TenXe"
+                               placeholder="Chọn tên xe">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">Hãng Xe</label>
+                        <input class="form-control" type="text" id="HangXe" name="HangXe"
+                               placeholder="Chọn hãng xe">
+                    </div>
+                    <div class="form-group">
+                        <label for="BienSoXe">Biển số xe</label>
+                        <input type="text" class="form-control" id="BienSoXe" name="BienSoXe" placeholder="Biển số xe">
+                    </div>
+                    <div class="form-group">
+                        <label for="SoLuongGhe">Số lượng ghế</label>
+                        <input type="text" class="form-control" id="SoLuongGhe" name="SoLuongGhe" placeholder="Số lượng ghế">
+                    </div>
+                    <div class="form-group">
+                        <label for="loaiChoNgoi">Loại chỗ ngồi</label>
+                        <div class="dropdown">
+                            <select name="loaiChoNgoi" id="loaiChoNgoi" asp-items="ViewBag.LoaiChoNgoi" class="js-example-basic-multiple form-control" style="width: auto !important;"></select>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Create</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            }
         </div>
     </div>
 </div>
 
 <!-- Edit modal -->
-<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -232,39 +140,77 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            @using (Html.BeginForm("Edit", "Xe", FormMethod.Post))
+            {
             <div class="modal-body">
+                <input type="text" id="MaXe_Edit" name="MaXe" hidden />
+                <div class="form-group">
+                    <label for="TenXe">Tên Xe</label>
+                    <input class="form-control" type="text" id="TenXe_Edit" name="TenXe"
+                           placeholder="Chọn tên xe">
+                </div>
                 <div class="form-group">
                     <label for="exampleInputName1">Hãng Xe</label>
-                    <input class="form-control" type="text" id="example-datetime-local-input" value="Toyota">
+                    <input class="form-control" type="text" id="HangXe_Edit" name="HangXe"
+                           placeholder="Chọn hãng xe">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputName1">Biển số xe</label>
-                    <input type="text" class="form-control" id="exampleInputName1" value="59B-05345">
+                    <label for="BienSoXe">Biển số xe</label>
+                    <input type="text" class="form-control" id="BienSoXe_Edit" name="BienSoXe" placeholder="Biển số xe">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword4">Số lượng ghế</label>
-                    <input type="text" class="form-control" id="exampleInputPassword4" value="30">
+                    <label for="SoLuongGhe">Số lượng ghế</label>
+                    <input type="text" class="form-control" id="SoLuongGhe_Edit" name="SoLuongGhe" placeholder="Số lượng ghế">
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword4">Loại chỗ ngồi</label>
+                    <label for="loaiChoNgoi">Loại chỗ ngồi</label>
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Giường nằm
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Ghế cứng</a>
-                            <a class="dropdown-item" href="#">Ghế mềm</a>
-                            <a class="dropdown-item" href="#">Giường nằm</a>
-                        </div>
+                        <select name="loaiChoNgoi" id="loaiChoNgoi_Edit" asp-items="ViewBag.LoaiChoNgoi" class="js-example-basic-multiple form-control" style="width: auto !important;"></select>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save change</button>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Edit</button>
+                </div>
+            }
         </div>
     </div>
 </div>
 <!--END Modal -->
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".edit-xe").click(function (e) {
+                $.ajax({
+                    url: "/Admin/Xe/Edit",
+                    data: {
+                        id: $(e.target).data("id")
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $("#MaXe_Edit").val(data.maXe);
+                        $("#TenXe_Edit").val(data.tenXe);
+                        $("#HangXe_Edit").val(data.hangXe);
+                        $("#BienSoXe_Edit").val(data.bienSoXe);
+                        $("#SoLuongGhe_Edit").val(data.soLuongGhe);
+                        $("#loaiChoNgoi_Edit").val(data.loaiCho);
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            });
+
+            $('.delete_xe').click(function (e) {
+                var result = confirm("Want to delete?");
+                if (!result) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

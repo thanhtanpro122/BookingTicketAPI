@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BookingTicket.Api.Areas.Admin.Filters;
 using BookingTicket.Entities.Context;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
@@ -9,6 +10,7 @@ using X.PagedList;
 namespace BookingTicket.Api.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [AuthorizeLogin]
     public class ThongTinDatVeController : Controller
     {
         private readonly BookingTicketContext _context;

@@ -189,8 +189,8 @@ namespace BookingTicket.Logic
                     GiaVe = e.GiaVe,
                     NgayDat = e.ThongtinDatCho.NgayDat,
                     NgayHuy = e.UpdateTime,
-                    ThoiGianKetThuc = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGianKetThuc.ToString("hh:mm"),
-                    ThoiGianKhoiHanh = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGianKhoiHanh.ToString("hh:mm"),
+                    ThoiGianKetThuc = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGianKetThuc.ToString(@"hh\:mm"),
+                    ThoiGianKhoiHanh = e.ThongtinDatCho.DieuHanh.TuyenXe.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
                     NgayKhoiHanh = e.ThongtinDatCho.DieuHanh.NgayKhoiHanh.Date.ToString(),
                     LoaiChoNgoi = e.ThongtinDatCho.DieuHanh.Xe.LoaiChoNgoi.TenLoaiChoNgoi
                 })
