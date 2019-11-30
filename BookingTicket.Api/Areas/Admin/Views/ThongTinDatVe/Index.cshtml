@@ -7,11 +7,17 @@
     ViewData["Page"] = "DatVe";
 }
 
+<style>
+    .notshow-button {
+        display:none;
+    }
+</style>
+
 <div class="row grid-margin">
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Thông tin đặt vé</h4>
+                <h4 class="card-title">Thông tin vé</h4>
                 <div class="table-toolbar">
                     <div>
                         <div style="float:right;">
@@ -33,6 +39,7 @@
                             <th>SDT</th>
                             <th>Số lượng vé</th>
                             <th>Ngày đặt</th>
+                            <th>Đổi ghế</th>
                             <th width="150">Chỉnh sửa</th>
                             <th width="85">Xóa</th>
                         </tr>
@@ -45,7 +52,12 @@
                                 <td>@item.HoTenNguoiDat</td>
                                 <td>@item.SDT</td>
                                 <td>@item.SoLuongVe</td>
-                                <td>@item.NgayDat</td>
+                                <td>@item.NgayDat.ToString("dd-MM-yyyy")</td>
+                                <td>
+                                    <a href="#" class="doighe" data-id="@item.MaDatCho">
+                                        Đổi ghế
+                                    </a>
+                                </td>
                                 <td>
                                     <a asp-area="Admin" asp-controller="ThongTinDatVe" asp-action="Edit" asp-route-id="@item.MaDatCho" class="btn btn-primary">
                                         Edit
@@ -74,13 +86,142 @@
     </div>
 </div>
 
+@*Modal*@
+<div class="modal fade" id="ChoNgoiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Sơ đồ chỗ ngồi</h5>
+                <button type="button" class="close close_modal" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="padding:0px;">
+                <div class="card" style="background-color:#F6F8FA; ">
+                    <input type="text" id="mave" name="mave" hidden />
+                    <div class="card-body dschongoi_partial">
+                        @*<div class="row">
+                            
+                            
+                                <span style="padding: 10px;">Ghe 1 : </span>
+                                <button type="button" data-id="" class="btn btn-success ">Đổi ghế</button>
+                            </div>*@
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close_modal" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success save-chang-chongoi notshow-button">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*End Modal*@
 
 @section scripts{
     <script>
+        $(".close_modal").click(function (e) {
+            $(".save-chang-chongoi").addClass("notshow-button");
+        });
+
+
         $('.delete_infodatcho').click(function (e) {
             var result = confirm("Want to delete?");
             if (!result) {
                 e.preventDefault();
+            }
+        });
+
+        $(".doighe").click(function (e) {
+            $.ajax({
+                url: "/Admin/ThongTinDatVe/GetChoNgoiById",
+                data: {
+                    id: $(this).data("id")
+                },
+                type: "GET",
+                contentType: "json",
+                success: function (data) {
+                    console.log(data);
+                    let view = "";
+                    for (let i = 0; i < data.length; i++) {
+                        view += `<div class="row">
+                                    <div class="col-4">
+                                           <span style="padding: 10px;"> Ghế ${data[i].viTriChoNgoi}</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <button type="button" data-id="${data[i].maChoNgoi}" data-dieuhanh="${data[i].maDieuHanh}" data-ve="${data[i].maVe}" class="btn btn-success change-chongoi">Đổi ghế</button>
+                                    </div>
+                                </div>
+                                <br />`
+                    }
+                    $(".dschongoi_partial").html(view);
+                    $("#ChoNgoiModal").modal("show");
+
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        });
+
+        $(".dschongoi_partial").on("click", ".change-chongoi", function () {
+            $("#mave").val($(this).data("ve"))
+            $.ajax({
+                url: "/Admin/ThongTinDatVe/GetDSChoNgoi",
+                data: {
+                    id: $(this).data("id"),
+                    dieuhanh: $(this).data("dieuhanh")
+                },
+                type: "GET",
+                contentType: "json",
+                success: function (data) {
+                    $(".save-chang-chongoi").removeClass("notshow-button");
+                    $(".dschongoi_partial").html(data);
+                },
+                error: function (response) {
+                    console.log(response)
+                }
+            });
+        });
+
+        $(".save-chang-chongoi").click(function (e) {
+            let btns = $(".vitrichongoi");
+            let idhientai = $(".vitrihientai").attr("data-id");
+            for (var i = 0; i < btns.length; i++) {
+                let select = $(btns[i]).attr("data-selected");
+                if (select == "true") {
+                    let idchange = $(btns[i]).attr("data-id");
+                    if (idchange == idhientai) {
+                        window.location.reload();
+                    }
+                    else {
+                        $.ajax({
+                            url: "/Admin/ThongTinDatVe/ChangeChoNgoi",
+                            data: {
+                                idchange: idchange,
+                                idhientai: idhientai,
+                                mave: $("#mave").val()
+                            },
+                            type: "GET",
+                            contentType: "json",
+                            success: function (e) {
+                                var result = confirm("Cập nhật ghế thành công. Bạn có muốn thoát?");
+                                if (result) {
+                                    window.location.reload();
+                                }
+                                else {
+                                    e.preventDefault();
+                                }
+
+                            },
+                            error: function (response) {
+                                console.log(response)
+                            }
+                        });
+                    }
+                }
             }
         });
     </script>

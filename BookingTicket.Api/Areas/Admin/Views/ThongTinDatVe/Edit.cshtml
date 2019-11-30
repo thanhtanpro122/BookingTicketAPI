@@ -1,7 +1,5 @@
-﻿
+﻿@model BookingTicket.Domain.DataModels.ThongTinDatVeDataModel
 @{
-    Layout = "~/Areas/Admin/Views/_Shared/_Layout.cshtml";
-
     ViewData["Title"] = "EditThongTinDatVe";
 }
 
@@ -10,52 +8,43 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">Edit thông tin đặt vé</h2>
-                <form class="forms-sample">
+                <form asp-area="Admin" asp-controller="ThongTinDatVe" asp-action="Edit" class="forms-sample" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="MaDatCho" />
                     <div class="form-group">
-                        <label for="exampleInputName1">Họ tên</label>
-                        <input type="text" class="form-control" id="exampleInputName1"
-                               value="Nguyễn Văn A">
+                        <label for="HoTenNguoiDat">Họ tên</label>
+                        <input asp-for="HoTenNguoiDat" type="text" class="form-control">
+                        <span asp-validation-for="HoTenNguoiDat" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Số điện thoại</label>
-                        <input type="text" class="form-control" id="exampleInputName1"
-                               value="0987654321">
+                        <label for="SDT">Số điện thoại</label>
+                        <input asp-for="SDT" type="text" class="form-control" >
+                        <span asp-validation-for="SDT" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Ngày đặt</label>
-                        <input type="date" class="form-control" id="exampleInputName1"
-                               value="2019-09-26">
+                        <label for="NgayDat">Ngày đặt</label>
+                        <input asp-for="NgayDat" type="text" class="form-control" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Ngày khởi hành</label>
-                        <input type="date" class="form-control" id="exampleInputName1"
-                               value="2019-09-28">
+                        <label for="NgayKhoiHanh">Ngày khởi hành</label>
+                        <input asp-for="NgayKhoiHanh" type="text" class="form-control" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Tuyến xe</label>
-                        <input type="text" class="form-control" id="exampleInputName1"
-                               value="Hồ Chí Minh -> Cà Mau">
+                        <label for="TuyenXe">Tuyến xe</label>
+                        <input asp-for="TuyenXe" type="text" class="form-control" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Thời gian chạy</label>
-                        <input type="text" class="form-control" id="exampleInputName1"
-                               value="10h-18h">
+                        <label for="ThoiGian">Thời gian chạy</label>
+                        <input asp-for="ThoiGian" type="text" class="form-control" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Xe</label>
-                        <input type="text" class="form-control" id="exampleInputName1"
-                               value="59B-05345">
+                        <label for="Xe">Xe</label>
+                        <input asp-for="Xe" type="text" class="form-control" disabled>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName1">Giá vé</label>
-                        <input class="form-control" type="text" id="example-datetime-local-input"
-                               value="220.000 VND">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputName1">Chỗ ngồi</label>
-                        <input class="form-control" type="text" id="example-datetime-local-input"
-                               value="A10 , A11">
-                    </div>
+                        <label for="GiaVe">Giá vé</label>
+                        <input asp-for="GiaVe" type="text" class="form-control" disabled>
+                    </div>                  
                     <button type="submit" class="btn btn-success mr-2">Submit</button>
                     <button class="btn btn-light">Cancel</button>
                 </form>
@@ -64,3 +53,19 @@
     </div>
 </div>
 
+@section scripts{
+    <script>   
+        $(document).ready(function () {
+            $("#NgayDat").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
+            });
+            $("#NgayKhoiHanh").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
+            });      
+        });
+    </script>
+}

@@ -52,8 +52,7 @@
                                 <td>@item.DiaDiem</td>
                                 <td>@thoigian</td>
                                 <td>
-                                    <a href="#" class="btn btn-primary edit-tuyenxe" data-id="@item.MaTuyenXe" data-toggle="modal" 
-                                       data-target="#EditModal">
+                                    <a href="#" class="btn btn-primary edit-tuyenxe" data-id="@item.MaTuyenXe" >
                                         Edit
                                     </a>
                                 </td>
@@ -242,6 +241,8 @@
                         $("#GiaVe_Edit").val(data.giaVe);
                         $("#ThoiGianKhoiHanh_Edit").val(data.thoiGianKhoiHanh);
                         $("#ThoiGianKetThuc_Edit").val(data.thoiGianKetThuc);
+
+                        $("#EditModal").modal("show");
                     },
                     error: function (response) {
                         console.log(response)

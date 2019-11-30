@@ -42,6 +42,7 @@
 
                                 <input type="text" id="xe" name="xe" placeholder="Xe" class="form-control" style="width: auto; display: inline-block" />
                                 <input type="text" id="maxe" name="maxe" hidden />
+
                                 <input id="ngaykhoihanh" name="ngaykhoihanh" placeholder="Ngày khởi hành" class="form-control" style="width: auto; display: inline-block" />
                                 <button type="submit" id="btnTimKiem" class="btn btn-default">
                                     <span class="glyphicon glyphicon-search"></span> Search
@@ -134,12 +135,12 @@
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Chọn tuyến xe</label>
-                        <input type="text" id="MaTuyenXe-Create" name="MaTuyenXe" />
+                        <input type="text" id="MaTuyenXe-Create" name="MaTuyenXe" hidden/>
                         <input type="text" class="form-control" id="tuyenxe-create" name="tuyenxe" placeholder="Chọn tuyến xe">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword4">Chọn xe</label>
-                        <input type="text" id="MaXe-Create" name="MaXe" />
+                        <input type="text" id="MaXe-Create" name="MaXe" hidden />
                         <input type="text" class="form-control" id="xe-create" name="xe" placeholder="Chọn xe">
                     </div>
                 </div>
@@ -167,19 +168,19 @@
             @using (Html.BeginForm("Edit", "DieuHanh", FormMethod.Post))
             {
                 <div class="modal-body">
-                    <input type="text" id="MaDieuHanh" name="MaDieuHanh" />
+                    <input type="text" id="MaDieuHanh" name="MaDieuHanh"  hidden/>
                     <div class="form-group">
                         <label for="exampleInputName1">Ngày khởi hành</label>
                         <input class="form-control" id="NgayKhoiHanh_Edit" name="NgayKhoiHanh">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Chọn tuyến xe</label>
-                        <input type="text" id="MaTuyenXe-Edit" name="MaTuyenXe" class="matuyenxe-edit" />
+                        <input type="text" id="MaTuyenXe-Edit" name="MaTuyenXe" class="matuyenxe-edit" hidden />
                         <input type="text" class="form-control" id="tuyenxe-edit" name="tuyenxe">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword4">Chọn xe</label>
-                        <input type="text" id="MaXe-Edit" name="MaXe" class="maxe-edit" />
+                        <input type="text" id="MaXe-Edit" name="MaXe" class="maxe-edit" hidden />
                         <input type="text" class="form-control" id="xe-edit" name="xe">
                     </div>
                 </div>
@@ -199,13 +200,13 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Chỗ ngồi</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Sơ đồ chỗ ngồi</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="card" style="background-color:#F6F8FA;">
+            <div class="modal-body" style="padding:0px;">
+                <div class="card" style="background-color:#F6F8FA; ">
                     <div class="card-body dschongoi_partial">
 
                     </div>
@@ -214,7 +215,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success">Save Change</button>
             </div>
         </div>
     </div>

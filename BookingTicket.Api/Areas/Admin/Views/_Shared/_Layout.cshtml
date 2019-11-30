@@ -44,10 +44,10 @@
                             <span class="profile-name">@Context.Request.Cookies["Username"]</span>
                         </a>
                         <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
-                            @*<a class="dropdown-item" href="#">
-                                    <i class="mdi mdi-cached mr-2 text-success"></i>
-                                    Activity Log
-                                </a>*@
+                            <a class="dropdown-item" href="#">
+                                <i class="mdi mdi-cached mr-2 text-success"></i>
+                                Change PassWord
+                            </a>
                             <a class="dropdown-item confirm_logout" href="/admin/dashboard/logout">
                                 <i class="mdi mdi-logout mr-2 text-primary"></i>
                                 Signout
@@ -67,37 +67,37 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item @((string)ViewData["Page"] == "DashBoard" ? "active" : "")">
-                        <a class="nav-link" href="/Admin/DashBoard">
+                        <a class="nav-link" href="/Admin/DashBoard/Index">
                             <i class="mdi mdi-compass-outline menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item @((string)ViewData["Page"] == "NguoiDung" ? "active" : "")">
-                        <a class="nav-link" href="/Admin/NguoiDungs">
+                        <a class="nav-link" href="/Admin/NguoiDungs/Index">
                             <i class="mdi mdi-account-search menu-icon"></i>
                             <span class="menu-title">Người dùng</span>
                         </a>
                     </li>
                     <li class="nav-item @((string)ViewData["Page"] == "DatVe" ? "active" : "")">
-                        <a class="nav-link active" href="/Admin/ThongTinDatVe">
+                        <a class="nav-link active" href="/Admin/ThongTinDatVe/Index">
                             <i class="mdi mdi-file-document-box menu-icon"></i>
                             <span class="menu-title">Thông tin đặt vé</span>
                         </a>
                     </li>
                     <li class="nav-item @((string)ViewData["Page"] == "DieuHanh" ? "active" : "")">
-                        <a class="nav-link" href="/Admin/DieuHanh">
+                        <a class="nav-link" href="/Admin/DieuHanh/Index">
                             <i class="mdi mdi-speedometer menu-icon"></i>
                             <span class="menu-title">Điều hành xe</span>
                         </a>
                     </li>
                     <li class="nav-item @((string)ViewData["Page"] == "Tuyen" ? "active" : "")">
-                        <a class="nav-link" href="/Admin/TuyenXe">
+                        <a class="nav-link" href="/Admin/TuyenXe/Index">
                             <i class="mdi mdi-swap-horizontal menu-icon"></i>
                             <span class="menu-title">Quản lí tuyến</span>
                         </a>
                     </li>
                     <li class="nav-item @((string)ViewData["Page"] == "Xe" ? "active" : "")">
-                        <a class="nav-link" href="/Admin/Xe">
+                        <a class="nav-link" href="/Admin/Xe/Index">
                             <i class="mdi mdi-car menu-icon"></i>
                             <span class="menu-title">Quản lí Xe</span>
                         </a>
@@ -138,7 +138,7 @@
     <script src="~/js/moment/min/moment.min.js"></script>
     <script src="~/css/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {          
+        $(document).ready(function () {
             $('.confirm_logout').click(function (e) {
                 var result = confirm("Want to Logout?");
                 if (!result) {

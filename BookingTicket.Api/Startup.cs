@@ -64,7 +64,7 @@ namespace BookingTicket.Api
                 routes.MapAreaRoute(
                   name: "areas_DashBoard",
                   areaName: "Admin",
-                  template: "{area:exists}/{controller=DashBoard}/{action=Index}/{id?}"
+                  template: "{area:exists}/{controller=DashBoard}/{action=Login}/{id?}"
                 );
             });
 

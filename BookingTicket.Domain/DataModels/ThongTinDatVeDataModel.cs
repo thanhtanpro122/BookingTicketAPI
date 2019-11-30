@@ -12,9 +12,19 @@ namespace BookingTicket.Domain.DataModels
 
         public int HinhThucThanhToan { get; set; }
 
-        public DateTime NgayDat { get; set; }
+        public string NgayDat { get; set; }
+
+        public string NgayKhoiHanh { get; set; }
 
         public string HoTenNguoiDat { get; set; }
+
+        public string TuyenXe { get; set; }
+
+        public string ThoiGian { get; set; }
+
+        public string Xe { get; set; }
+
+        public double GiaVe { get; set; }
 
         public string SDT { get; set; }
 

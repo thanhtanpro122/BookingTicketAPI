@@ -90,7 +90,21 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         public IActionResult GetListChoNgoiById(long id)
         {
             var listChoNgoi = _context.ChoNgois.Where(e => e.MaDieuHanh == id).ToList();
-            return PartialView("_DsChoNgoi", listChoNgoi);
+
+            var stop = listChoNgoi.Count / 10;
+            var tableChoNgoi = new List<List<ChoNgoi>>();
+
+            List<ChoNgoi> tableRow = new List<ChoNgoi>(stop);
+            for (int i = 0; i < listChoNgoi.Count; i++)
+            {
+                tableRow.Add(listChoNgoi[i]);
+                if ((i + 1) % stop == 0)
+                {
+                    tableChoNgoi.Add(tableRow);
+                    tableRow = new List<ChoNgoi>();
+                }
+            }
+            return PartialView("_DsChoNgoi", tableChoNgoi);
         }
         public IActionResult UpdateStatusChoNgoi(long id)
         {

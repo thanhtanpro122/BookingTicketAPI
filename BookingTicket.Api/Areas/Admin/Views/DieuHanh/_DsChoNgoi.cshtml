@@ -1,17 +1,16 @@
-﻿@model List<BookingTicket.Entities.Models.ChoNgoi>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>ViTri</th>
-            <th>TinhTrang</th>
-        </tr>
-    </thead>
+﻿@model List<List<BookingTicket.Entities.Models.ChoNgoi>>
+<table class="table table-hover">  
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>Ghế @item.ViTriChoNgoi</td>
-                <td><button style="background-color: @(item.TinhTrang == 0 ? "green" : "red")" type="button" data-id="@item.MaChoNgoi" class="btn btn-success vitrichongoi">@(item.TinhTrang == 0 ? "Chưa đặt" : "Đã đặt")</button></td>
+                @foreach (var subitem in item)
+                {
+                    <td>
+                        <button style="background-color: @(subitem.TinhTrang == 0 ? "green" : "red")" type="button" data-id="@subitem.MaChoNgoi" class="btn btn-success vitrichongoi">@subitem.ViTriChoNgoi</button>
+                    </td>
+                }
+
             </tr>
         }
     </tbody>
@@ -31,10 +30,8 @@
                     console.log(data);
                     if (data === 1) {
                         $(e.target).css("background-color", "red");
-                        $(e.target).text("Đã đặt");
                     } else {
                         $(e.target).css("background-color", "green");
-                        $(e.target).text("Chưa đặt");
                     }
                 },
                 error: function (response) {
