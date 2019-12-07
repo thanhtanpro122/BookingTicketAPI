@@ -54,12 +54,14 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Mã điều hành</th>
+                            @*<th>Mã điều hành</th>*@
                             <th>Ngày khởi hành</th>
                             <th>Tuyến xe</th>
                             <th>Thời gian chạy</th>
                             <th>Xe</th>
-                            <th>Chỗ ngồi</th>
+                            @*<th>Chỗ ngồi</th>*@
+                            <th>Tình trạng</th>
+                            <th>Đổi trạng thái</th>
                             <th width="150">Chỉnh sửa</th>
                             <th width="85">Xóa</th>
                         </tr>
@@ -72,14 +74,39 @@
 
                             <tr>
                                 <td>@item.MaDieuHanh</td>
-                                <td>@item.NgayKhoiHanh</td>
+                                <td>@item.NgayKhoiHanh.ToString("dd/MM/yyyy")</td>
                                 <td>@tuyen</td>
                                 <td>@thoigian</td>
                                 <td>@item.TenXe</td>
-                                <td>
+                                @*<td>
                                     <a href="#" class="chongoi" data-id="@item.MaDieuHanh" data-toggle="modal" data-target="#ChoNgoiModal">
                                         @item.TinhTrang / @item.TongGhe
                                     </a>
+                                </td>*@
+                                <td>
+                                    @if(item.Status == 0)
+                                    {
+                                        <p>Chua hoan thanh</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Hoan thanh</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Status == 0)
+                                    {
+                                        <a asp-area="Admin" asp-controller="DieuHanh" asp-action="ChangeStatus" asp-route-id="@item.MaDieuHanh" class="btn btn-success change-status">
+                                            Change
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <button disabled class="btn btn-success change-status" data-id="@item.MaDieuHanh" >
+                                            Change
+                                        </button>
+                                    }
+
                                 </td>
                                 <td>
                                     <a class="btn btn-primary edit-dieuhanh" data-id="@item.MaDieuHanh">
@@ -126,22 +153,25 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Html.BeginForm("Create", "DieuHanh", FormMethod.Post))
+            @using (Html.BeginForm("Create", "DieuHanh", FormMethod.Post ,new { id = "create-dieuhanh-form" }))
             {
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="exampleInputName1">Ngày khởi hành</label>
                         <input class="form-control" id="NgayKhoiHanh" name="NgayKhoiHanh">
+                        <span id="validate_ngaykhoihanh" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Chọn tuyến xe</label>
-                        <input type="text" id="MaTuyenXe-Create" name="MaTuyenXe" hidden/>
+                        <input type="text" id="MaTuyenXe-Create" name="MaTuyenXe" hidden />
                         <input type="text" class="form-control" id="tuyenxe-create" name="tuyenxe" placeholder="Chọn tuyến xe">
+                        <span id="validate_tuyenxe" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword4">Chọn xe</label>
                         <input type="text" id="MaXe-Create" name="MaXe" hidden />
                         <input type="text" class="form-control" id="xe-create" name="xe" placeholder="Chọn xe">
+                        <span id="validate_xe" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -165,23 +195,27 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Html.BeginForm("Edit", "DieuHanh", FormMethod.Post))
+            @using (Html.BeginForm("Edit", "DieuHanh", FormMethod.Post , new { id = "edit-dieuhanh-form" }))
             {
                 <div class="modal-body">
                     <input type="text" id="MaDieuHanh" name="MaDieuHanh"  hidden/>
                     <div class="form-group">
                         <label for="exampleInputName1">Ngày khởi hành</label>
                         <input class="form-control" id="NgayKhoiHanh_Edit" name="NgayKhoiHanh">
+                        <span id="validate_NgayKhoiHanh_Edit" class="text-danger"></span>
+
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Chọn tuyến xe</label>
                         <input type="text" id="MaTuyenXe-Edit" name="MaTuyenXe" class="matuyenxe-edit" hidden />
                         <input type="text" class="form-control" id="tuyenxe-edit" name="tuyenxe">
+                        <span id="validate_tuyenxe-edit" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword4">Chọn xe</label>
                         <input type="text" id="MaXe-Edit" name="MaXe" class="maxe-edit" hidden />
                         <input type="text" class="form-control" id="xe-edit" name="xe">
+                        <span id="validate_xe-edit" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -241,7 +275,7 @@
                     tuyenxe = [];
                     $.each(data, function (i, item) {
                         var id = item.maTuyenXe;
-                        var diadiem = item.diaDiem;
+                        var diadiem = item.diaDiem +" ("+ item.thoiGian +")";
                         tuyenxe.push({
                             id: id,
                             name: diadiem
@@ -363,22 +397,28 @@
         }();
 
         $(document).ready(function () {
-            $(".chongoi").click(function () {
-                $.ajax({
-                    url: "/Admin/DieuHanh/GetListChoNgoiById",
-                    data: {
-                        id: $(this).data("id")
-                    },
-                    type: "GET",
-                    contentType: "json",
-                    success: function (data) {
-                        $(".dschongoi_partial").html(data);
-                    },
-                    error: function (response) {
-                        console.log(response)
-                    }
-                });
+            $('.change-status').click(function (e) {
+                var result = confirm("Ban muon doi trang thai");
+                if (!result) {
+                    e.preventDefault();
+                }
             });
+            //$(".chongoi").click(function () {
+            //    $.ajax({
+            //        url: "/Admin/DieuHanh/GetListChoNgoiById",
+            //        data: {
+            //            id: $(this).data("id")
+            //        },
+            //        type: "GET",
+            //        contentType: "json",
+            //        success: function (data) {
+            //            $(".dschongoi_partial").html(data);
+            //        },
+            //        error: function (response) {
+            //            console.log(response)
+            //        }
+            //    });
+            //});
 
             $(".edit-dieuhanh").click(function (e) {
                 $.ajax({
@@ -426,10 +466,68 @@
                 changeMonth: true,
                 changeYear: true
             });
-            $("#ngaykhoihanh").datepicker({
+            $("#validate_xe-edit").datepicker({
                 dateFormat: 'yy-mm-dd',//check change
                 changeMonth: true,
                 changeYear: true
+            });
+
+
+            $("#create-dieuhanh-form").submit(() => {
+                $("#validate_ngaykhoihanh").html("");
+                $("#validate_tuyenxe").html("");
+                $("#validate_xe").html("");
+
+                let valid = true;
+                let ngaykhoihanh = $("#NgayKhoiHanh").val();
+                let tuyenxe = $("#tuyenxe-create").val();
+                let xe = $("#xe-create").val();
+
+
+                if (ngaykhoihanh == "") {
+                    $("#validate_ngaykhoihanh").html("Ngay khoi hanh khong hop le");
+                    valid = false;
+                }
+
+                if (tuyenxe == "") {
+                    $("#validate_tuyenxe").html("Tuyen xe khong hop le");
+                    valid = false;
+                }
+
+                if (xe == "") {
+                    $("#validate_xe").html("Xe khong hop le");
+                    valid = false;
+                }
+
+                return valid;
+            });
+
+            $("#edit-dieuhanh-form").submit(() => {
+                $("#validate_NgayKhoiHanh_Edit").html("");
+                $("#validate_tuyenxe-edit").html("");
+                $("#validate_xe").html("");
+
+                let valid = true;
+                let ngaykhoihanh = $("#NgayKhoiHanh_Edit").val();
+                let tuyenxe = $("#tuyenxe-edit").val();
+                let xe = $("#xe-edit").val();
+
+                if (ngaykhoihanh == "") {
+                    $("#validate_NgayKhoiHanh_Edit").html("Ngay khoi hanh khong hop le");
+                    valid = false;
+                }
+
+                if (tuyenxe == "") {
+                    $("#validate_tuyenxe-edit").html("Tuyen xe khong hop le");
+                    valid = false;
+                }
+
+                if (xe == "") {
+                    $("#validate_xe-edit").html("Xe khong hop le");
+                    valid = false;
+                }
+
+                return valid;
             });
         });
     </script>

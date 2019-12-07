@@ -122,14 +122,18 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
             var choNgoi = new ArrayList();
             foreach (var ve in datCho.DanhSachVe)
             {
-                choNgoi.Add(new {
-                    MaChoNgoi = ve.ChoNgoi.MaChoNgoi,
-                    TinhTrang = ve.ChoNgoi.TinhTrang,
-                    MaDieuHanh = ve.ChoNgoi.MaDieuHanh,
-                    ViTriChoNgoi = ve.ChoNgoi.ViTriChoNgoi,
-                    MaVe = ve.MaVe
+                if(ve.Status != 2)
+                {
+                    choNgoi.Add(new
+                    {
+                        MaChoNgoi = ve.ChoNgoi.MaChoNgoi,
+                        TinhTrang = ve.ChoNgoi.TinhTrang,
+                        MaDieuHanh = ve.ChoNgoi.MaDieuHanh,
+                        ViTriChoNgoi = ve.ChoNgoi.ViTriChoNgoi,
+                        MaVe = ve.MaVe
 
-                });
+                    });
+                }
             }
             return Json(choNgoi);
         }

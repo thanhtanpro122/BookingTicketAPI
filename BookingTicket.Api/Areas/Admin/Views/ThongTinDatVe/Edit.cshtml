@@ -8,18 +8,18 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">Edit thông tin đặt vé</h2>
-                <form asp-area="Admin" asp-controller="ThongTinDatVe" asp-action="Edit" class="forms-sample" method="post">
+                <form asp-area="Admin" asp-controller="ThongTinDatVe" asp-action="Edit" id="edit-thongtindatve-form" class="forms-sample" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="MaDatCho" />
                     <div class="form-group">
                         <label for="HoTenNguoiDat">Họ tên</label>
                         <input asp-for="HoTenNguoiDat" type="text" class="form-control">
-                        <span asp-validation-for="HoTenNguoiDat" class="text-danger"></span>
+                        <span id="validate_hoten" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="SDT">Số điện thoại</label>
-                        <input asp-for="SDT" type="text" class="form-control" >
-                        <span asp-validation-for="SDT" class="text-danger"></span>
+                        <input asp-for="SDT" type="text" class="form-control">
+                        <span id="validate_sdt" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="NgayDat">Ngày đặt</label>
@@ -66,6 +66,30 @@
                 changeMonth: true,
                 changeYear: true
             });      
+            $("#edit-thongtindatve-form").submit(() => {
+                $("#validate_hoten").html("");
+                $("#validate_sdt").html("");
+
+                let valid = true;
+                let hoten = $("#HoTenNguoiDat").val();
+                let sdt = $("#SDT").val();
+                let check = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+
+                if (hoten == "") {
+                    $("#validate_hoten").html("Ho ten khong hop le");
+                    valid = false;
+                }
+
+                if (sdt == "") {
+                    $("#validate_sdt").html("SDT khong duoc trong");
+                    valid = false;
+                }
+                else if (check.test(sdt) == false) {
+                    $("#validate_sdt").html("SDT khong hop le");
+                }
+
+                return valid;
+            });
         });
     </script>
 }

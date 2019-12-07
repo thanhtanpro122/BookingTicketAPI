@@ -61,6 +61,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
 
             Response.Cookies.Append("Username", admin.UserName, options);
             Response.Cookies.Append("Password", admin.MatKhau, options);
+            Response.Cookies.Append("IDAdmin", admin_check.AdminID.ToString(), options);
 
             return RedirectToAction("Index");
         }
@@ -83,7 +84,31 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         {
             Response.Cookies.Delete("Username");
             Response.Cookies.Delete("Password");
+            Response.Cookies.Delete("IDAdmin");
             return RedirectToAction("Login");
+        }
+
+        public ActionResult ChangePassword(string passold, string passnew)
+        {
+            var id = HttpContext.Request.Cookies["IDAdmin"];
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return Json(new { status = 401 });
+            }
+            var idadmin = long.Parse(id);
+            if (idadmin == 0)
+            {
+                return Json(new { status = 401 });
+            }
+            passold = GetMD5Admin(passold);
+            var check = _context.Admins.FirstOrDefault(x => x.AdminID == idadmin && x.MatKhau == passold);
+            if(check == null)
+            {
+                return Json(new { status = 200 });
+            }
+            check.MatKhau = GetMD5Admin(passnew);
+            _context.SaveChanges();
+            return Json(new { status = 204 });
         }
     }
 }

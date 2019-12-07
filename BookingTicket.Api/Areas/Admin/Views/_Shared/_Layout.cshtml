@@ -44,7 +44,7 @@
                             <span class="profile-name">@Context.Request.Cookies["Username"]</span>
                         </a>
                         <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" data-toggle="modal" data-target="#ChangePassword">
                                 <i class="mdi mdi-cached mr-2 text-success"></i>
                                 Change PassWord
                             </a>
@@ -126,8 +126,49 @@
 
             <!-- main-panel ends -->
         </div>
-
     </div>
+
+    <div class="modal fade" id="ChangePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Đổi mật khẩu</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @using (Html.BeginForm("ChangePassword", "DashBoard", FormMethod.Post, new { id = "change-pass-form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <span id="summary-validate" class="text-center text-danger"></span>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="exampleInputName1">Mật khẩu cũ</label>
+                            <input type="text" class="form-control" id="password_old" name="password_old">
+                            <span id="validate_pass_old" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputName1">Mật khẩu mới</label>
+                            <input type="text" class="form-control" id="password_new" name="password_new">
+                            <span id="validate_pass_new" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword4">Xác nhận mật khẩu</label>
+                            <input type="text" class="form-control" id="password_confirm" name="password_confirm">
+                            <span id="validate_pass_confirm" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save changes</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
 
     <script src="~/js/jquery/dist/jquery.min.js"></script>
     <script src="~/js/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -144,6 +185,62 @@
                 if (!result) {
                     e.preventDefault();
                 }
+            });
+
+            $("#change-pass-form").submit((e) => {
+                e.preventDefault();
+                $("#validate_pass_old").html("");
+                $("#validate_pass_new").html("");
+                $("#validate_pass_confirm").html("");
+                $("#summary-validate").html("");
+
+                let valid = true;
+                let pass = $("#password_old").val()
+                if (pass == "") {
+                    $("#validate_pass_old").html("Mat khau khong hop le");
+                    valid = false;
+                }
+
+                let newPass = $("#password_new").val();
+                if (newPass == "") {
+                    $("#validate_pass_new").html("Mat khau moi khong hop le");
+                    valid = false;
+                } else {
+                    let reNewPass = $("#password_confirm").val();
+                    if (reNewPass != newPass) {
+                        $("#validate_pass_confirm").html("Mat khau khong khop");
+                        valid = false;
+                    }
+                }
+
+                if (valid) {
+                    $.ajax({
+                        url: "/Admin/DashBoard/ChangePassword",
+                        data: {
+                            passold: $("#password_old").val(),
+                            passnew: $("#password_new").val()
+                        },
+                        type: "Get",
+                        contentType: "json",
+                        success: function (data) {
+                            if (data.status == 200) {
+                                $("#validate_pass_old").html("Mat khau khong hop le");
+                            }
+                            else if (data.status == 401) {
+                                $("#summary-validate").html("Da xay ra loi he thong");
+                            }
+                            else {
+                                alert("Doi mat khau thanh cong");
+                                location.reload();
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response)
+                        }
+                    });
+                }
+
+                return valid;
             });
         });
     </script>

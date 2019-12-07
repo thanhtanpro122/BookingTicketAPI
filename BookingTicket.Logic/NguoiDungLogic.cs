@@ -243,5 +243,21 @@ namespace BookingTicket.Logic
                 return false;
             }
         }
+        public bool HuyVe(long mave)
+        {
+            var ve = context.Ves.Find(mave);
+            ve.Status = 2;
+            if(ve == null)
+            {
+                return false;
+            }
+            var thongtindatcho = context.ThongTinDatChos.Find(ve.MaDatCho);
+            thongtindatcho.SoLuongVe -= 1;
+
+            var chongoi = context.ChoNgois.Find(ve.MaChoNgoi);
+            chongoi.TinhTrang = 0;
+            context.SaveChanges();
+            return true;
+        }
     }
 }

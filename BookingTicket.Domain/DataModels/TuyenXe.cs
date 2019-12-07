@@ -19,6 +19,7 @@ namespace BookingTicket.Domain.ViewModels
         public long MaXe { get; set; }
         public string TenXe { get; set; }
         public string LoaiChoNgoi { get; set; }
+        public int Status { get; set; }
         public List<ChoNgoiItem> ChoNgoi { get; set; }
     }
     public class ChoNgoiItem

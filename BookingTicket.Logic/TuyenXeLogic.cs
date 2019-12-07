@@ -27,27 +27,48 @@ namespace BookingTicket.Logic
 
         public List<TuyenXe> GetDSTuyenXe(string diadiemdi, string diadiemden, DateTime ngayKhoiHanh)
         {
-            var tuyenXes = context.TuyenXes
-                .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.DanhSachChoNgoi)
-                .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.Xe).ThenInclude(e=>e.LoaiChoNgoi)
-                .Where(e => e.DiaDiemDi == diadiemdi && e.DiaDiemDen == diadiemden && e.DanhSachDieuHanh.Any(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date))
+            var dieuhanhs = context.DieuHanhs
+                .Include(e => e.Xe).ThenInclude(e => e.LoaiChoNgoi)
+                .Include(e => e.DanhSachChoNgoi)
+                .Include(e => e.TuyenXe)
+                .Where(e => e.Status == 0 && e.TuyenXe.DiaDiemDi == diadiemdi && e.TuyenXe.DiaDiemDen == diadiemden && e.NgayKhoiHanh.Date == ngayKhoiHanh.Date)
                 .Select(e => new TuyenXe
                 {
-                    DiaDiemDen = e.DiaDiemDen,
-                    DiaDiemDi = e.DiaDiemDi,
+                    DiaDiemDen = e.TuyenXe.DiaDiemDen,
+                    DiaDiemDi = e.TuyenXe.DiaDiemDi,
                     NgayKhoiHanh = ngayKhoiHanh.Date,
-                    GiaVe = e.GiaVe,
-                    MaTuyenXe= e.MaTuyenXe,
-                    ThoiGianKetThuc= e.ThoiGianKetThuc.ToString(@"hh\:mm"),
-                    ThoiGianKhoiHanh= e.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
-                    TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
-                    TongGhe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).DanhSachChoNgoi.Count(),
-                    MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).MaDieuHanh,
-                    MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).Xe.MaXe,
-                    TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).Xe.TenXe
+                    GiaVe = e.TuyenXe.GiaVe,
+                    MaTuyenXe = e.TuyenXe.MaTuyenXe,
+                    ThoiGianKetThuc = e.TuyenXe.ThoiGianKetThuc.ToString(@"hh\:mm"),
+                    ThoiGianKhoiHanh = e.TuyenXe.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
+                    TinhTrang = e.DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
+                    TongGhe = e.DanhSachChoNgoi.Count(),
+                    MaDieuHanh = e.MaDieuHanh,
+                    MaXe = e.Xe.MaXe,
+                    TenXe = e.Xe.TenXe
                 })
                 .ToList();
-            return tuyenXes;
+            //var tuyenXes = context.TuyenXes
+            //    .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.DanhSachChoNgoi)
+            //    .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.Xe).ThenInclude(e=>e.LoaiChoNgoi)
+            //    .Where(e => e.DiaDiemDi == diadiemdi && e.DiaDiemDen == diadiemden && e.DanhSachDieuHanh.Any(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date))
+            //    .Select(e => new TuyenXe
+            //    {
+            //        DiaDiemDen = e.DiaDiemDen,
+            //        DiaDiemDi = e.DiaDiemDi,
+            //        NgayKhoiHanh = ngayKhoiHanh.Date,
+            //        GiaVe = e.GiaVe,
+            //        MaTuyenXe= e.MaTuyenXe,
+            //        ThoiGianKetThuc= e.ThoiGianKetThuc.ToString(@"hh\:mm"),
+            //        ThoiGianKhoiHanh= e.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
+            //        TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
+            //        TongGhe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).DanhSachChoNgoi.Count(),
+            //        MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).MaDieuHanh,
+            //        MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).Xe.MaXe,
+            //        TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == ngayKhoiHanh.Date).Xe.TenXe
+            //    })
+            //    .ToList();
+            return dieuhanhs;
         }
 
         public List<ChoNgoiItem> GetDSChoNgoi(long maDieuHanh)
@@ -64,26 +85,48 @@ namespace BookingTicket.Logic
 
         public List<TuyenXe> GetAll()
         {
-            var tuyenXes = context.TuyenXes
-                .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.DanhSachChoNgoi)
-                .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.Xe)
-                .Where(e => e.DanhSachDieuHanh.Any(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)))
+            var dieuhanhs = context.DieuHanhs
+                .Include(e => e.Xe).ThenInclude(e => e.LoaiChoNgoi)
+                .Include(e => e.DanhSachChoNgoi)
+                .Include(e => e.TuyenXe)
+                .Where(e => e.Status == 0 && (e.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || e.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)))
                 .Select(e => new TuyenXe
                 {
-                    DiaDiemDen = e.DiaDiemDen,
-                    DiaDiemDi = e.DiaDiemDi,
-                    NgayKhoiHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).NgayKhoiHanh.Date,
-                    GiaVe = e.GiaVe,
-                    MaTuyenXe = e.MaTuyenXe,
-                    ThoiGianKetThuc = e.ThoiGianKetThuc.ToString(@"hh\:mm"),
-                    ThoiGianKhoiHanh = e.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
-                    TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
-                    MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).MaDieuHanh,
-                    MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.MaXe,
-                    TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.BienSoXe
+                    DiaDiemDen = e.TuyenXe.DiaDiemDen,
+                    DiaDiemDi = e.TuyenXe.DiaDiemDi,
+                    NgayKhoiHanh = e.NgayKhoiHanh.Date,
+                    GiaVe = e.TuyenXe.GiaVe,
+                    MaTuyenXe = e.TuyenXe.MaTuyenXe,
+                    ThoiGianKetThuc = e.TuyenXe.ThoiGianKetThuc.ToString(@"hh\:mm"),
+                    ThoiGianKhoiHanh = e.TuyenXe.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
+                    TinhTrang = e.DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
+                    TongGhe = e.DanhSachChoNgoi.Count(),
+                    MaDieuHanh = e.MaDieuHanh,
+                    MaXe = e.Xe.MaXe,
+                    TenXe = e.Xe.TenXe
                 })
                 .ToList();
-            return tuyenXes;
+
+            //var tuyenXes = context.TuyenXes
+            //    .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.DanhSachChoNgoi)
+            //    .Include(e => e.DanhSachDieuHanh).ThenInclude(e => e.Xe)
+            //    .Where(e => e.DanhSachDieuHanh.Any(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)))
+            //    .Select(e => new TuyenXe
+            //    {
+            //        DiaDiemDen = e.DiaDiemDen,
+            //        DiaDiemDi = e.DiaDiemDi,
+            //        NgayKhoiHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).NgayKhoiHanh.Date,
+            //        GiaVe = e.GiaVe,
+            //        MaTuyenXe = e.MaTuyenXe,
+            //        ThoiGianKetThuc = e.ThoiGianKetThuc.ToString(@"hh\:mm"),
+            //        ThoiGianKhoiHanh = e.ThoiGianKhoiHanh.ToString(@"hh\:mm"),
+            //        TinhTrang = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).DanhSachChoNgoi.Where(i => i.TinhTrang == 0).Count(),
+            //        MaDieuHanh = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).MaDieuHanh,
+            //        MaXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.MaXe,
+            //        TenXe = e.DanhSachDieuHanh.First(i => i.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || i.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)).Xe.BienSoXe
+            //    })
+            //    .ToList();
+            return dieuhanhs;
         }
     }
 }

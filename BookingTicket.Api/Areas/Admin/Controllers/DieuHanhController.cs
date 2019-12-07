@@ -46,9 +46,10 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
                     TongGhe = e.DanhSachChoNgoi.Count(),
                     MaDieuHanh = e.MaDieuHanh,
                     MaXe = e.Xe.MaXe,
-                    TenXe = e.Xe.BienSoXe
+                    TenXe = e.Xe.BienSoXe,
+                    Status = e.Status
                 })
-                .OrderBy(e => e.MaDieuHanh)
+                .OrderByDescending(e => e.MaDieuHanh)
                 .ToList();
             var datevalid = new DateTime(0001, 1, 1);
             if (ngaykhoihanh.Date != datevalid)
@@ -190,5 +191,23 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult ChangeStatus(long? id)
+        {
+            var dieuhanh = _context.DieuHanhs.Find(id);
+            dieuhanh.Status = 1;
+
+            var listThongTinDatVe = _context.ThongTinDatChos
+                .Include(e=>e.DanhSachVe)
+                .Where(e => e.MaDieuHanh == dieuhanh.MaDieuHanh);
+            foreach(var item in listThongTinDatVe)
+            {
+                foreach(var ve in item.DanhSachVe)
+                {
+                    ve.Status = 1;
+                }
+            }
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

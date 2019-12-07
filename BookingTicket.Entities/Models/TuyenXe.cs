@@ -34,6 +34,8 @@ namespace BookingTicket.Entities.Models
 
         public TimeSpan ThoiGianKetThuc { get; set; }
 
+        public string ThoiGian => ThoiGianKhoiHanh.ToString(@"hh\:mm") + "->" + ThoiGianKetThuc.ToString(@"hh\:mm");
+
         public DateTime? CreatedTime { get; set; }
 
         public DateTime? UpdateTime { get; set; }
