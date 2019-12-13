@@ -92,25 +92,29 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Html.BeginForm("Create", "TuyenXe", FormMethod.Post))
+            @using (Html.BeginForm("Create", "TuyenXe", FormMethod.Post, new { id = "create-tuyenxe-form" }))
             {
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="TenTuyenXe">Tên tuyến</label>
                         <input class="form-control" type="text" id="TenTuyenXe" name="TenTuyenXe"
                                placeholder="Tên tuyến xe">
+                        <span id="validate_TenTuyenXe" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="DiaDiemDi">Địa điểm đi</label>
                         <input type="text" class="form-control" id="DiaDiemDi" name="DiaDiemDi" placeholder="Địa điểm đi">
+                        <span id="validate_DiaDiemDi" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="DiaDiemDen">Địa điểm điến</label>
                         <input type="text" class="form-control" id="DiaDiemDen" name="DiaDiemDen" placeholder="Địa điểm đến">
+                        <span id="validate_DiaDiemDen" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="GiaVe">Giá vé</label>
                         <input type="text" class="form-control" id="GiaVe" name="GiaVe" placeholder="Giá vé">
+                        <span id="validate_GiaVe" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="ThoiGianKhoiHanh">Giờ đi</label>
@@ -119,6 +123,7 @@
                                 <input type="text" id="ThoiGianKhoiHanh" name="ThoiGianKhoiHanh" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#ThoiGianKhoiHanh_Create" />
                                 <div class="input-group-addon input-group-append"><i class="mdi mdi-clock input-group-text"></i></div>
                             </div>
+                            <span id="validate_GioDi" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -128,6 +133,7 @@
                                 <input type="text" id="ThoiGianKetThuc" name="ThoiGianKetThuc" placeholder="Thời gian đến" class="form-control datetimepicker-input" data-target="#ThoiGianKetThuc_Create" />
                                 <div class="input-group-addon input-group-append"><i class="mdi mdi-clock input-group-text"></i></div>
                             </div>
+                            <span id="validate_GioDen" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
@@ -257,6 +263,56 @@
                     e.preventDefault();
                 }
             });
+
+            $("#create-tuyenxe-form").submit(() => {
+                $("#validate_TenTuyenXe").html("");
+                $("#validate_DiaDiemDi").html("");
+                $("#validate_DiaDiemDen").html("");
+                $("#validate_GiaVe").html("");
+                $("#validate_GioDi").html("");
+                $("#validate_GioDen").html("");
+
+                let valid = true;
+                let tentuyenxe = $("#TenTuyenXe").val();
+                let diadiemdi = $("#DiaDiemDi").val();
+                let diadiemden = $("#DiaDiemDen").val();
+                let giave = $("#GiaVe").val();
+                let giodi = $("#ThoiGianKhoiHanh").val();
+                let gioden = $("#ThoiGianKetThuc").val();
+
+
+
+                if (tentuyenxe == "") {
+                    $("#validate_TenTuyenXe").html("Ten tuyen xe khong hop le");
+                    valid = false;
+                }
+
+                if (diadiemdi == "") {
+                    $("#validate_DiaDiemDi").html("Dia diem di khong hop le");
+                    valid = false;
+                }
+
+                if (diadiemden == "") {
+                    $("#validate_DiaDiemDen").html("Dia diem den khong hop le");
+                    valid = false;
+                }
+
+                if (giave == "") {
+                    $("#validate_GiaVe").html("Gia ve khong hop le");
+                    valid = false;
+                }
+                if (giodi == "") {
+                    $("#validate_GioDi").html("Gio di khong hop le");
+                    valid = false;
+                }
+                if (gioden == "") {
+                    $("#validate_GioDen").html("Gio den khong hop le");
+                    valid = false;
+                }
+
+                return valid;
+            });
+        
         });
     </script>
 }

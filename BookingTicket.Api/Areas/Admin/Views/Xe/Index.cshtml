@@ -93,26 +93,30 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @using (Html.BeginForm("Create", "Xe", FormMethod.Post))
+            @using (Html.BeginForm("Create", "Xe", FormMethod.Post, new { id = "create-xe-form" }))
             {
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="TenXe">Tên Xe</label>
                         <input class="form-control" type="text" id="TenXe" name="TenXe"
                                placeholder="Chọn tên xe">
+                        <span id="validate_TenXe" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputName1">Hãng Xe</label>
                         <input class="form-control" type="text" id="HangXe" name="HangXe"
                                placeholder="Chọn hãng xe">
+                        <span id="validate_HangXe" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="BienSoXe">Biển số xe</label>
                         <input type="text" class="form-control" id="BienSoXe" name="BienSoXe" placeholder="Biển số xe">
+                        <span id="validate_BienSoXe" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="SoLuongGhe">Số lượng ghế</label>
                         <input type="text" class="form-control" id="SoLuongGhe" name="SoLuongGhe" placeholder="Số lượng ghế">
+                        <span id="validate_SoLuongGhe" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="loaiChoNgoi">Loại chỗ ngồi</label>
@@ -212,6 +216,41 @@
                 if (!result) {
                     e.preventDefault();
                 }
+            });
+
+            $("#create-xe-form").submit(() => {
+                $("#validate_TenXe").html("");
+                $("#validate_HangXe").html("");
+                $("#validate_BienSoXe").html("");
+                $("#validate_SoLuongGhe").html("");
+
+                let valid = true;
+                let tenxe = $("#TenXe").val();
+                let hangxe = $("#HangXe").val();
+                let biensoxe = $("#BienSoXe").val();
+                let soluongghe = $("#SoLuongGhe").val();
+                
+                if (tenxe == "") {
+                    $("#validate_TenXe").html("Ten xe khong hop le");
+                    valid = false;
+                }
+
+                if (hangxe == "") {
+                    $("#validate_HangXe").html("Hang xe di khong hop le");
+                    valid = false;
+                }
+
+                if (biensoxe == "") {
+                    $("#validate_BienSoXe").html("Bien so xe khong hop le");
+                    valid = false;
+                }
+
+                if (soluongghe == "") {
+                    $("#validate_SoLuongGhe").html("So luong ghe khong hop le");
+                    valid = false;
+                }
+                
+                return valid;
             });
         });
     </script>

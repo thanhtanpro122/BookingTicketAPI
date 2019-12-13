@@ -27,5 +27,6 @@ namespace BookingTicket.Domain.ViewModels
         public long MaChoNgoi { get; set; }
         public int TinhTrang { get; set; }
         public long MaDieuHanh { get; set; }
+        public int Vitri { get; set; }
     }
 }

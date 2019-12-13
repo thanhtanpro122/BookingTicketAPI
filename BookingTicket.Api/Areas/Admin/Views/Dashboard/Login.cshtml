@@ -21,17 +21,20 @@
                             <div class="col-lg-6 bg-white">
                                 <div class="auth-form-light text-left p-5">
                                     <h2>Login</h2>
-                                    @using (Html.BeginForm("Login", "DashBoard", FormMethod.Post))
+                                    @using (Html.BeginForm("Login", "DashBoard", FormMethod.Post, new { id = "login-form" }))
                                     {
+                                        <span id="summary-validate" class="text-center text-danger"></span>
                                         <div class="form-group">
                                             <label for="UserName">Username</label>
                                             <input type="email" class="form-control" id="UserName" name="UserName" aria-describedby="emailHelp" placeholder="Username">
                                             <i class="mdi mdi-account"></i>
+                                            <span id="validate_username" class="text-danger"></span>
                                         </div>
                                         <div class="form-group">
                                             <label for="MatKhau">Password</label>
                                             <input type="password" class="form-control" id="MatKhau" name="MatKhau" placeholder="Password">
                                             <i class="mdi mdi-eye"></i>
+                                            <span id="validate_pass" class="text-danger"></span>
                                         </div>
                                         <div class="mt-5">
                                             <button class="btn btn-block btn-success btn-lg" type="submit">Login</button>
@@ -55,6 +58,30 @@
     <script src="~/js/dashboard.js"></script>
     <script src="~/js/misc.js"></script>
     <script src="~/js/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {       
+            $("#login-form").submit(() => {
+                $("#validate_username").html("");
+                $("#validate_pass").html("");
+
+                let valid = true;
+                let username = $("#UserName").val()
+                if (username == "") {
+                    $("#validate_username").html("Username khong hop le");
+                    valid = false;
+                }
+
+                let pass = $("#MatKhau").val()
+                if (pass == "") {
+                    $("#validate_pass").html("Mat khau khong hop le");
+                    valid = false;
+                }                
+
+                return valid;
+            });
+        });
+    </script>
 </body>
 </html>
 

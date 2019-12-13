@@ -246,5 +246,20 @@ namespace BookingTicket.Api.Controllers
             }
             return Ok(new { mesmessage = "success" });
         }
+
+        [HttpPost("huyve")]
+        public IActionResult HuyVe(long mave)
+        {
+            if (mave == 0)
+            {
+                return BadRequest();
+            }
+            var check = nguoiDungLogic.HuyVe(mave);
+            if (!check)
+            {
+                return Ok(new { mesmessage = "fail", TinhTrang = "Co loi" });
+            }
+            return Ok(new { mesmessage = "success" });
+        }
     }
 }

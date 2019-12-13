@@ -59,11 +59,11 @@
                             <th>Tuyến xe</th>
                             <th>Thời gian chạy</th>
                             <th>Xe</th>
-                            @*<th>Chỗ ngồi</th>*@
+                            <th>Chỗ ngồi</th>
                             <th>Tình trạng</th>
                             <th>Đổi trạng thái</th>
-                            <th width="150">Chỉnh sửa</th>
-                            <th width="85">Xóa</th>
+                            <th>Chỉnh sửa</th>
+                            <th>Xóa</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -73,11 +73,16 @@
                             var thoigian = item.ThoiGianKhoiHanh + "-" + item.ThoiGianKetThuc;
 
                             <tr>
-                                <td>@item.MaDieuHanh</td>
+                                @*<td>@item.MaDieuHanh</td>*@
                                 <td>@item.NgayKhoiHanh.ToString("dd/MM/yyyy")</td>
                                 <td>@tuyen</td>
                                 <td>@thoigian</td>
                                 <td>@item.TenXe</td>
+                                <td>
+                                    <p>
+                                        @item.TinhTrang / @item.TongGhe
+                                    </p>
+                                </td>
                                 @*<td>
                                     <a href="#" class="chongoi" data-id="@item.MaDieuHanh" data-toggle="modal" data-target="#ChoNgoiModal">
                                         @item.TinhTrang / @item.TongGhe

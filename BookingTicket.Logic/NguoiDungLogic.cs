@@ -247,6 +247,7 @@ namespace BookingTicket.Logic
         {
             var ve = context.Ves.Find(mave);
             ve.Status = 2;
+            ve.UpdateTime = DateTime.Now;
             if(ve == null)
             {
                 return false;

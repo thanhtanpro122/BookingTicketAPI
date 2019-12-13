@@ -5,81 +5,134 @@
     ViewData["Title"] = "DashBoard";
     ViewData["Page"] = "DashBoard";
 }
+<link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" rel="stylesheet" />
 
+@*<div class="row">
+        <div class="col-2">
 
-<div class="row">
-    <div class="col-lg-3 grid-margin d-flex align-items-stretch">
-        <div class="row">
-            <div class="col-12 grid-margin stretch-card">
-                <!--card statistics-->
-                <div class="card bg-success text-white">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="mr-auto">
-                                <h1 class="mb-0">1200</h1>
-                                <p>
-                                    Ngày
-                                </p>
-                            </div>
-                            <div class="ml-auto">
-                                <i class="mdi mdi-account-switch mdi-36px"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--card statistics-->
-            </div>
-            <div class="col-12 grid-margin stretch-card">
-                <!--card statistics-->
-                <div class="card bg-danger text-white">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="mr-auto">
-                                <h1 class="mb-0">15234</h1>
-                                <p>
-                                    Tháng
-                                </p>
-                            </div>
-                            <div class="ml-auto">
-                                <i class="mdi mdi-clipboard-text mdi-36px"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--card statistics-->
-            </div>
-            <div class="col-12 grid-margin stretch-card">
-                <!--card statistics-->
-                <div class="card bg-warning text-white">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="mr-auto">
-                                <h1 class="mb-0">105412</h1>
-                                <p>
-                                    Quý
-                                </p>
-                            </div>
-                            <div class="ml-auto">
-                                <i class="mdi mdi-cube-outline mdi-36px"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--card statistics-->
-            </div>
         </div>
-    </div>
-    <div class="col-lg-9 grid-margin stretch-card">
-        <!--business survey chart-->
+        <div class="col-8">
+            <img src="~/image/Website-đang-update.png" />
+        </div>
+        <div class="col-2">
+
+        </div>
+    </div>*@
+<div class="row grid-margin">
+    <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Thống kê</h4>
-                <canvas id="business-survey-chart" height="210"></canvas>
+                <h2 class="card-title">Thống kê</h2>
+                <div class="table-toolbar">
+                    <div style="padding-bottom: 4rem;">
+                        <div style="float:left;">
+                            <input id="fromdate" name="fromdate" placeholder="From date" class="form-control" style="width: auto; display: inline-block" />
+                            <input id="todate" name="todate" placeholder="To date" class="form-control" style="width: auto; display: inline-block" />
+                            <button id="thongke" class="btn btn-default">
+                                <span class="glyphicon glyphicon-search"></span> Thống kê
+                            </button>
+                        </div>
+                        <canvas id="chartThongKe"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-        <!--business survey chart ends-->
     </div>
 </div>
 
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#fromdate").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
+            });
+            $("#todate").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
+            });
+            $("#thongke").click(function (e) {
+                $.ajax({
+                    url: "/Admin/DashBoard/ThongKe",
+                    data: {
+                        fromdate: $("#fromdate").val(),
+                        todate: $("#todate").val()
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (res) {
+                        let label = [];
+                        let data = [];
+                        let background = [];
+                        let sluong = []
+                        for (let i = 0; i < res.length; i++) {
+                            var randomColor = '#' + ('000000' + Math.floor(Math.random() * 16777215).toString(16)).slice(-6);
+                            label.push(res[i].ngay);
+                            data.push(res[i].tongGia);
+                            sluong.push(res[i].soLuongVe);
+                            background.push(randomColor);
+                        }                        
+
+                        var barChartData = {
+                            labels: label,
+                            datasets: [{
+                                label: 'Tổng tiền vé',
+                                backgroundColor: "red",
+                                yAxisID: 'y-axis-1',
+                                data: data
+                            },
+                            {
+                                label: 'Số lượng vé',
+                                backgroundColor: "blue",
+                                yAxisID: 'y-axis-2',
+                                data: sluong
+                            }]
+
+                        };
+
+                        new Chart("chartThongKe", {
+                            type: 'bar',
+                            data: barChartData,
+                            options: {
+                                responsive: true,
+                                title: {
+                                    display: true,
+                                    text: 'Biểu đồ thống kê - Ticket Booking'
+                                },
+                                tooltips: {
+                                    mode: 'index',
+                                    intersect: true
+                                },
+                                scales: {
+                                    yAxes: [{
+                                        type: 'linear',
+                                        display: true,
+                                        position: 'left',
+                                        id: 'y-axis-1',
+                                    }, {
+                                        type: 'linear', 
+                                        display: true,
+                                        position: 'right',
+                                        id: 'y-axis-2',
+                                        gridLines: {
+                                            drawOnChartArea: false
+                                        }
+                                    }],
+                                }
+                            }
+                        });
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            });
+        });
+    </script>
+}
 
 

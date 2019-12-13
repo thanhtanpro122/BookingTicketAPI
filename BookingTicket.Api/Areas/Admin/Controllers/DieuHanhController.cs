@@ -73,14 +73,14 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
         public JsonResult GetListTuyenXe(string name)
         {
-            var tuyenxe = _context.TuyenXes.Where(x => x.DiaDiem.Contains(name ?? "")).Take(10).ToList();
+            var tuyenxe = _context.TuyenXes.ToList();
             return Json(tuyenxe);
         }
         public JsonResult GetListXe()
         {
             try
             {
-                var xe = _context.Xes.Take(10).ToList();
+                var xe = _context.Xes.ToList();
                 return Json(xe);
             }
             catch (Exception ex)
@@ -204,6 +204,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
                 foreach(var ve in item.DanhSachVe)
                 {
                     ve.Status = 1;
+                    ve.UpdateTime = DateTime.Now;
                 }
             }
             _context.SaveChanges();

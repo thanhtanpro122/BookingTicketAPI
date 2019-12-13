@@ -5,9 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BookingTicket.Api.Areas.Admin.Filters;
 using BookingTicket.Entities.Context;
+using BookingTicket.Entities.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingTicket.Api.Areas.Admin.Controllers
 {
@@ -22,9 +24,39 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
 
         [AuthorizeLogin]
-        public IActionResult Index()
+        public IActionResult Index(DateTime fromdate, DateTime todate)
         {
+
             return View();
+        }
+
+
+        public IActionResult ThongKe(DateTime fromdate, DateTime todate)
+        {
+            var ve = _context.Ves
+                .Include(e => e.ThongtinDatCho).ThenInclude(e => e.DieuHanh)
+                .Where(e => e.Status == 1 && e.ThongtinDatCho.DieuHanh.Status == 1 && e.ThongtinDatCho.DieuHanh.NgayKhoiHanh.Date >= fromdate.Date && e.ThongtinDatCho.DieuHanh.NgayKhoiHanh.Date <= todate.Date)
+                .Select(e => new Ve
+                {
+                    MaVe = e.MaVe,
+                    GiaVe = e.GiaVe,
+                    Status = e.Status,
+                    UpdateTime = e.UpdateTime,
+                    MaDatCho = e.MaDatCho,
+                    MaChoNgoi = e.MaChoNgoi,
+                    ThongtinDatCho = e.ThongtinDatCho,
+                    ChoNgoi = e.ChoNgoi
+                })
+                .GroupBy(e => e.ThongtinDatCho.DieuHanh.NgayKhoiHanh.Date, e => e)
+                .Select(e => new
+                {
+                    Ngay = e.Key.ToString("dd/MM/yyyy"),
+                    TongGia = e.Sum(h => h.GiaVe),
+                    SoLuongVe = e.Count()
+                })
+                .ToList(); 
+
+            return Json(ve);
         }
 
         public IActionResult Login()

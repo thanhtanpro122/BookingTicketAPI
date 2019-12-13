@@ -78,6 +78,7 @@ namespace BookingTicket.Logic
                 {
                     MaChoNgoi = e.MaChoNgoi,
                     TinhTrang = e.TinhTrang,
+                    Vitri = e.ViTriChoNgoi,
                     MaDieuHanh = e.MaDieuHanh ?? -1
                 }).ToList();
             return choNgois;
