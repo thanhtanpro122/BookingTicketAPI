@@ -18,11 +18,11 @@ namespace BookingTicket.Logic
         }
         public List<string> GetDiaDiemDi()
         {
-            return context.TuyenXes.Select(e => e.DiaDiemDi).Distinct().ToList();
+            return context.TuyenXes.Where(e=>e.IsDelete==0).Select(e => e.DiaDiemDi).Distinct().ToList();
         }
         public List<string> GetDiaDiemDen()
         {
-            return context.TuyenXes.Select(e => e.DiaDiemDen).Distinct().ToList();
+            return context.TuyenXes.Where(e => e.IsDelete == 0).Select(e => e.DiaDiemDen).Distinct().ToList();
         }
 
         public List<TuyenXe> GetDSTuyenXe(string diadiemdi, string diadiemden, DateTime ngayKhoiHanh)
@@ -31,7 +31,7 @@ namespace BookingTicket.Logic
                 .Include(e => e.Xe).ThenInclude(e => e.LoaiChoNgoi)
                 .Include(e => e.DanhSachChoNgoi)
                 .Include(e => e.TuyenXe)
-                .Where(e => e.Status == 0 && e.TuyenXe.DiaDiemDi == diadiemdi && e.TuyenXe.DiaDiemDen == diadiemden && e.NgayKhoiHanh.Date == ngayKhoiHanh.Date)
+                .Where(e => e.Status == 0 && e.TuyenXe.IsDelete==0 && e.Xe.IsDelete==0 && e.TuyenXe.DiaDiemDi == diadiemdi && e.TuyenXe.DiaDiemDen == diadiemden && e.NgayKhoiHanh.Date == ngayKhoiHanh.Date)
                 .Select(e => new TuyenXe
                 {
                     DiaDiemDen = e.TuyenXe.DiaDiemDen,
@@ -45,7 +45,8 @@ namespace BookingTicket.Logic
                     TongGhe = e.DanhSachChoNgoi.Count(),
                     MaDieuHanh = e.MaDieuHanh,
                     MaXe = e.Xe.MaXe,
-                    TenXe = e.Xe.TenXe
+                    TenXe = e.Xe.TenXe,
+                    LoaiChoNgoi = e.Xe.LoaiChoNgoi.TenLoaiChoNgoi
                 })
                 .ToList();
             //var tuyenXes = context.TuyenXes
@@ -90,7 +91,7 @@ namespace BookingTicket.Logic
                 .Include(e => e.Xe).ThenInclude(e => e.LoaiChoNgoi)
                 .Include(e => e.DanhSachChoNgoi)
                 .Include(e => e.TuyenXe)
-                .Where(e => e.Status == 0 && (e.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || e.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)))
+                .Where(e => e.Status == 0 && e.TuyenXe.IsDelete == 0 && e.Xe.IsDelete == 0 && (e.NgayKhoiHanh.Date == DateTime.Today.AddDays(1) || e.NgayKhoiHanh.Date == DateTime.Today.AddDays(2)))
                 .Select(e => new TuyenXe
                 {
                     DiaDiemDen = e.TuyenXe.DiaDiemDen,

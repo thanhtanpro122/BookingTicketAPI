@@ -34,6 +34,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
             ViewBag.searchString = searchString;
             var xe = _context.Xes
                 .Include(e => e.LoaiChoNgoi)
+                .Where(e=>e.IsDelete==0)
                 .ToList();
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -80,6 +81,13 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
 
         public IActionResult Delete(long? id)
         {
+            var xe = _context.Xes.Find(id);
+            if (xe == null)
+            {
+                return NotFound();
+            }
+            xe.IsDelete = 1;
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

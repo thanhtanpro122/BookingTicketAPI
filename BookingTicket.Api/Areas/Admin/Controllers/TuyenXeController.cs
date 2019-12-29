@@ -22,7 +22,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
         public IActionResult Index(string searchString, int? page)
         {
-            var tuyenxes = _context.TuyenXes.ToList();
+            var tuyenxes = _context.TuyenXes.Where(e=>e.IsDelete==0).ToList();
             if (searchString != null)
             {
                 page = 1;
@@ -41,6 +41,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         public IActionResult Create(TuyenXe tuyenXe)
         {
             tuyenXe.CreatedTime = DateTime.Now;
+            tuyenXe.IsDelete = 0;
             _context.Add(tuyenXe);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -78,6 +79,13 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
 
         public IActionResult Delete(long? id)
         {
+            var tuyenxe = _context.TuyenXes.Find(id);
+            if (tuyenxe == null)
+            {
+                return NotFound();
+            }
+            tuyenxe.IsDelete = 1;
+            _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }

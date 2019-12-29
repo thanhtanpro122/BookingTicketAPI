@@ -33,6 +33,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
                 .Include(e => e.Xe)
                 .Include(e => e.TuyenXe)
                 .Include(e => e.DanhSachChoNgoi)
+                .Where(e=>e.TuyenXe.IsDelete==0 && e.Xe.IsDelete==0)
                 .Select(e => new Domain.ViewModels.TuyenXe
                 {
                     DiaDiemDen = e.TuyenXe.DiaDiemDen,

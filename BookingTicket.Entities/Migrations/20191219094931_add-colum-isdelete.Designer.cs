@@ -3,26 +3,25 @@ using System;
 using BookingTicket.Entities.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BookingTicket.Entities.Migrations
 {
     [DbContext(typeof(BookingTicketContext))]
-    partial class BookingTicketContextModelSnapshot : ModelSnapshot
+    [Migration("20191219094931_add-colum-isdelete")]
+    partial class addcolumisdelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.11-servicing-32099");
 
-            modelBuilder.Entity("BookingTicket.Entities.Models.Admins", b =>
+            modelBuilder.Entity("BookingTicket.Entities.Models.Admin", b =>
                 {
                     b.Property<long>("AdminID")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("HoTen")
-                        .HasColumnType("varchar(150)");
 
                     b.Property<int>("IsSuperAdmin");
 
@@ -194,29 +193,6 @@ namespace BookingTicket.Entities.Migrations
                     b.ToTable("TuyenXe");
                 });
 
-            modelBuilder.Entity("BookingTicket.Entities.Models.UserCode", b =>
-                {
-                    b.Property<long>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(64);
-
-                    b.Property<DateTime?>("ExpiredTime");
-
-                    b.Property<int?>("Status");
-
-                    b.Property<long?>("UserID");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID")
-                        .IsUnique();
-
-                    b.ToTable("UserCode");
-                });
-
             modelBuilder.Entity("BookingTicket.Entities.Models.Ve", b =>
                 {
                     b.Property<long>("MaVe")
@@ -295,13 +271,6 @@ namespace BookingTicket.Entities.Migrations
                     b.HasOne("BookingTicket.Entities.Models.NguoiDung", "NguoiDatCho")
                         .WithMany("DanhSachDatCho")
                         .HasForeignKey("MaKH");
-                });
-
-            modelBuilder.Entity("BookingTicket.Entities.Models.UserCode", b =>
-                {
-                    b.HasOne("BookingTicket.Entities.Models.NguoiDung", "NguoiDungs")
-                        .WithOne("UserCodes")
-                        .HasForeignKey("BookingTicket.Entities.Models.UserCode", "UserID");
                 });
 
             modelBuilder.Entity("BookingTicket.Entities.Models.Ve", b =>

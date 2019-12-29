@@ -1,0 +1,220 @@
+﻿@using X.PagedList.Mvc.Core
+@using X.PagedList
+@using X.PagedList.Mvc.Common
+@model IPagedList<BookingTicket.Entities.Models.Admins>
+@{
+    ViewData["Title"] = "Admin";
+    ViewData["Page"] = "Admin";
+}
+
+<div class="row grid-margin">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Quản lí Admin</h4>
+                <div class="table-toolbar">
+                    <div>
+                        <div style="float:left;">
+                            <button class="btn btn-success" data-toggle="modal"
+                                    data-target="#CreateModal">
+                                Thêm mới
+                            </button>
+                        </div>
+                        <div style="float:right;">
+                            @using (Html.BeginForm("Index", "Admins", FormMethod.Post))
+                            {
+                                <input type="text" id="searchString" name="searchString" placeholder="Tìm kiếm" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
+                                <button type="submit" id="btnTimKiem" class="btn btn-default">
+                                    <span class="glyphicon glyphicon-search"></span> Search
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Mã admin</th>
+                            <th>UserName</th>
+                            <th>Họ tên</th>
+                            <th width="150">Chỉnh sửa</th>
+                            <th width="85">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.AdminID</td>
+                                <td>@item.UserName</td>
+                                <td>@item.HoTen</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary edit-admin" data-id="@item.AdminID">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Admins" asp-action="Delete" asp-route-id="@item.AdminID" class="btn btn-danger delete_admin">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div style="float:right;padding-top: 25px;">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @(Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+                        {
+                            LiElementClasses = new string[] { "page-item" },
+                            PageClasses = new string[] { "page-link" },
+                            UlElementClasses = new string[] { "pagination rounded-flat pagination-success" }
+                        }))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<!-- Create modal -->
+<div class="modal fade" id="CreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thêm Xe</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("Create", "Admins", FormMethod.Post, new { id = "create-admins-form" }))
+            {
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="TenXe">UserName</label>
+                        <input class="form-control" type="text" id="UserName" name="UserName"
+                               placeholder="UserName">
+                        <span id="validate_UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName1">PassWord</label>
+                        <input class="form-control" type="text" id="MatKhau" name="MatKhau"
+                               placeholder="Password">
+                        <span id="validate_MatKhau" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="BienSoXe">Họ tên</label>
+                        <input type="text" class="form-control" id="HoTen" name="HoTen" placeholder="Họ tên">
+                        <span id="validate_HoTen" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Create</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Edit modal -->
+<div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa thông tin xe</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @using (Html.BeginForm("Edit", "Admins", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <input type="text" id="Admins_Edit" name="AdminID" hidden />
+                    <input type="text" id="Admins_MatKhau" name="MatKhau" hidden />
+                    <div class="form-group">
+                        <label for="TenXe">UserName</label>
+                        <input class="form-control" type="text" id="UserName_Edit" name="UserName"
+                               placeholder="UserName">
+                    </div>
+                    <div class="form-group">
+                        <label for="BienSoXe">Họ tên</label>
+                        <input type="text" class="form-control" id="HoTen_Edit" name="HoTen" placeholder="Họ tên">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Edit</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<!--END Modal -->
+
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".edit-admin").click(function (e) {
+                $.ajax({
+                    url: "/Admin/Admins/Edit",
+                    data: {
+                        id: $(e.target).data("id")
+                    },
+                    type: "GET",
+                    contentType: "json",
+                    success: function (data) {
+                        console.log(data);
+
+                        $("#Admins_Edit").val(data.adminID);
+                        $("#UserName_Edit").val(data.userName);
+                        $("#HoTen_Edit").val(data.hoTen);
+                        $("#Admins_MatKhau").val(data.matKhau);
+
+                        $("#EditModal").modal("show");
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            });
+
+            $('.delete_admin').click(function (e) {
+                var result = confirm("Want to delete?");
+                if (!result) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#create-admins-form").submit(() => {
+                $("#validate_UserName").html("");
+                $("#validate_MatKhau").html("");
+                $("#validate_HoTen").html("");
+
+                let valid = true;
+                let username = $("#UserName").val();
+                let matkhau = $("#MatKhau").val();
+                let hoten = $("#HoTen").val();
+
+                if (username == "") {
+                    $("#validate_UserName").html("Username không hợp lệ!");
+                    valid = false;
+                }
+
+                if (matkhau == "") {
+                    $("#validate_MatKhau").html("Password không hợp lệ!");
+                    valid = false;
+                }
+
+                if (hoten == "") {
+                    $("#validate_HoTen").html("Họ tên không hợp lệ!");
+                    valid = false;
+                }
+
+                return valid;
+            });
+        });
+    </script>
+}

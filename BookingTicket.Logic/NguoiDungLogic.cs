@@ -4,9 +4,13 @@ using BookingTicket.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BookingTicket.Logic
@@ -102,7 +106,7 @@ namespace BookingTicket.Logic
                 str += b.ToString("X2");
             }
             return str;
-        }       
+        }
 
         public bool Modify(NguoiDung e)
         {
@@ -111,20 +115,24 @@ namespace BookingTicket.Logic
             {
                 return false;
             }
-            if (CheckTonTai(e.SDT))
+            if (nguoiDung.SDT != e.SDT)
             {
-                return false;
+                if (CheckTonTai(e.SDT))
+                {
+                    return false;
+                }
             }
-            nguoiDung.SDT = e.SDT;
+            //nguoiDung.SDT = e.SDT;
             nguoiDung.HoTen = e.HoTen;
-            nguoiDung.Email = e.Email;
-            nguoiDung.MatKhau = GetMD5(e.MatKhau);
-            nguoiDung.GioiTinh = e.GioiTinh;
+            //nguoiDung.Email = e.Email;
+            //nguoiDung.MatKhau = GetMD5(e.MatKhau);
+            //nguoiDung.GioiTinh = e.GioiTinh;
             nguoiDung.DiaChi = e.DiaChi;
-            nguoiDung.NgaySinh = e.NgaySinh;
-            nguoiDung.UpdateTime = e.UpdateTime;
-            nguoiDung.CreatedTime = e.CreatedTime;
-            nguoiDung.Avatar = e.Avatar;
+            //nguoiDung.NgaySinh = e.NgaySinh;
+            nguoiDung.UpdateTime = DateTime.Now;
+            //nguoiDung.CreatedTime = e.CreatedTime;
+            //nguoiDung.Avatar = e.Avatar;
+            context.SaveChanges();
             return true;
         }
 
@@ -178,8 +186,8 @@ namespace BookingTicket.Logic
                 .ThenInclude(e => e.TuyenXe)
                 .Include(e => e.ThongtinDatCho)
                 .ThenInclude(e => e.DieuHanh)
-                .ThenInclude(e=>e.Xe)
-                .ThenInclude(e=>e.LoaiChoNgoi)
+                .ThenInclude(e => e.Xe)
+                .ThenInclude(e => e.LoaiChoNgoi)
                 .Where(e => e.Status == status && e.ThongtinDatCho.MaKH == userId)
                 .Select(e => new DSVe
                 {
@@ -248,7 +256,7 @@ namespace BookingTicket.Logic
             var ve = context.Ves.Find(mave);
             ve.Status = 2;
             ve.UpdateTime = DateTime.Now;
-            if(ve == null)
+            if (ve == null)
             {
                 return false;
             }
@@ -257,6 +265,113 @@ namespace BookingTicket.Logic
 
             var chongoi = context.ChoNgois.Find(ve.MaChoNgoi);
             chongoi.TinhTrang = 0;
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool DoiMatKhau(long userId, string passnew)
+        {
+            var user = context.NguoiDungs.Find(userId);
+            if (user == null)
+            {
+                return false;
+            }
+            user.MatKhau = GetMD5(passnew);
+            context.SaveChanges();
+            return true;
+        }
+
+        public bool ForgotPassword(string sdt)
+        {
+            var user = context.NguoiDungs.FirstOrDefault(e => e.SDT == sdt);
+            if (user == null)
+            {
+                return false;
+            }
+
+            Random random = new Random();
+            string code = random.Next(10000,99999).ToString();
+
+            var usercode = context.UserCodes.FirstOrDefault(e => e.UserID == user.UserID);
+            if (usercode == null)
+            {
+                context.UserCodes.Add(new UserCode
+                {
+                    UserID = user.UserID,
+                    Code = code,
+                    ExpiredTime = DateTime.UtcNow.AddMinutes(2),
+                    Status = 1 //Chờ reset mật khẩu
+                });
+            }
+            else
+            {
+                usercode.Code = code;
+                usercode.ExpiredTime = DateTime.UtcNow.AddDays(1);
+                usercode.Status = 1; //Chờ reset mật khẩu
+            }
+            context.SaveChanges();
+
+            string emailbody = "We are so sorry that you have forgotten your password. Don’t worry, you can change your password now. " 
+                + "Your code : " + code;
+
+            SendEmail("ngocdieupham711@gmail.com", "dieu16110291", user.Email, "Reset Password", emailbody);
+
+            return true;
+        }
+
+        public void SendEmail(string fromaddress,  string fromPassword, string toaddress, string subject, string body)
+        {
+            try
+            {
+                var SMTP = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential(fromaddress, fromPassword),
+                    EnableSsl = true
+                };
+
+                var message = new MailMessage(fromaddress, toaddress)
+                {
+                    Subject = subject,
+                    Body = body
+                };
+                SMTP.Send(message);
+
+            }
+            catch (Exception ex)
+            {
+                //LogManager.GetLogger().WriteDebug("SendEmail error", ex);
+                //errorCallback?.Invoke();
+            }
+
+        }
+
+        public long CheckCode(string code)
+        {
+            var usercode = context.UserCodes.SingleOrDefault(x => x.Code == code && x.Status == 1 && x.ExpiredTime >= DateTime.UtcNow);
+            if (usercode == null)
+            {
+                return 0;
+            }
+            return usercode.UserID;
+        }
+
+        public bool ResetPassword(long userID, string password)
+        {
+            var user = context.NguoiDungs.Find(userID);
+            if(user == null)
+            {
+                return false;
+            }
+            user.MatKhau = GetMD5(password);
+
+
+            var data = context.UserCodes.SingleOrDefault(x => x.UserID == userID && x.Status == 1);
+            if (data == null)
+            {
+                return false;
+            }
+            data.Status = 2;
             context.SaveChanges();
             return true;
         }

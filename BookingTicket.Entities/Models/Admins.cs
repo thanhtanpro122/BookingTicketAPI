@@ -7,7 +7,7 @@ using System.Text;
 namespace BookingTicket.Entities.Models
 {
     [Table("Admin")]
-    public class Admin
+    public class Admins
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,6 +18,9 @@ namespace BookingTicket.Entities.Models
 
         [Column(TypeName = "varchar(50)")]
         public string MatKhau { get; set; }
+
+        [Column(TypeName = "varchar(150)")]
+        public string HoTen { get; set; }
 
         public int IsSuperAdmin { get; set; }
     }

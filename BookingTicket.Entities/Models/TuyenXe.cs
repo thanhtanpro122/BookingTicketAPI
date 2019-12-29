@@ -40,6 +40,8 @@ namespace BookingTicket.Entities.Models
 
         public DateTime? UpdateTime { get; set; }
 
+        public int IsDelete { get; set; }
+
         public virtual ICollection<DieuHanh> DanhSachDieuHanh { get; set; }
     }
 }

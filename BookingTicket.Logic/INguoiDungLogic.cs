@@ -37,5 +37,15 @@ namespace BookingTicket.Logic
 
         bool HuyVe(long mave);
 
+        bool DoiMatKhau(long userId, string passnew);
+
+        bool ForgotPassword(string sdt);
+
+        void SendEmail(string fromaddress, string fromPassword, string toaddress, string subject, string body);
+
+        long CheckCode(string code);
+
+        bool ResetPassword(long userID, string password);
+
     }
 }

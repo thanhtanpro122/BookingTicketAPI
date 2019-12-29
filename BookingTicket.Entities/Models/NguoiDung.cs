@@ -45,5 +45,7 @@ namespace BookingTicket.Entities.Models
         public DateTime? UpdateTime { get; set; }
 
         public virtual ICollection<ThongTinDatCho> DanhSachDatCho { get; set; }
+
+        public virtual UserCode UserCodes { get; set; }
     }
 }

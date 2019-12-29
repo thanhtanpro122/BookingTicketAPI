@@ -63,6 +63,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         {
             var checkusername = Request.Cookies["Username"];
             var checkpass = Request.Cookies["Password"];
+            var checkisadmin = Request.Cookies["IsAdmin"];
             if (string.IsNullOrEmpty(checkusername) && string.IsNullOrEmpty(checkpass))
             {
                 return View();
@@ -76,7 +77,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(BookingTicket.Entities.Models.Admin admin)
+        public IActionResult Login(BookingTicket.Entities.Models.Admins admin)
         {
             admin.MatKhau = GetMD5Admin(admin.MatKhau);
             var admin_check = _context.Admins.FirstOrDefault(e => e.UserName == admin.UserName && e.MatKhau == admin.MatKhau);
@@ -93,6 +94,8 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
 
             Response.Cookies.Append("Username", admin.UserName, options);
             Response.Cookies.Append("Password", admin.MatKhau, options);
+            Response.Cookies.Append("IsAdmin", admin_check.IsSuperAdmin.ToString(), options);
+
             Response.Cookies.Append("IDAdmin", admin_check.AdminID.ToString(), options);
 
             return RedirectToAction("Index");
@@ -117,6 +120,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
             Response.Cookies.Delete("Username");
             Response.Cookies.Delete("Password");
             Response.Cookies.Delete("IDAdmin");
+            Response.Cookies.Delete("IsAdmin");
             return RedirectToAction("Login");
         }
 

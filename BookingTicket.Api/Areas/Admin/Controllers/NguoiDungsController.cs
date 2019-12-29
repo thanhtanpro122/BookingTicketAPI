@@ -174,5 +174,6 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         {
             return _context.NguoiDungs.Any(e => e.UserID == id);
         }
+
     }
 }

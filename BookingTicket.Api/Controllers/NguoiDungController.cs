@@ -111,7 +111,7 @@ namespace BookingTicket.Api.Controllers
         [HttpPost("register")]
         public IActionResult Register(string sdt, string email, string matkhau)
         {
-            if (String.IsNullOrWhiteSpace(sdt)&& String.IsNullOrWhiteSpace(email) && String.IsNullOrWhiteSpace(matkhau))
+            if (String.IsNullOrWhiteSpace(sdt) && String.IsNullOrWhiteSpace(email) && String.IsNullOrWhiteSpace(matkhau))
             {
                 return BadRequest();
             }
@@ -119,7 +119,7 @@ namespace BookingTicket.Api.Controllers
             {
                 return Ok(new { ExistPhone = true, Registered = false });
             }
-            var success = nguoiDungLogic.Register(sdt,email,matkhau);         
+            var success = nguoiDungLogic.Register(sdt, email, matkhau);
             return Ok(new { ExistPhone = false, Registered = success });
         }
 
@@ -127,7 +127,7 @@ namespace BookingTicket.Api.Controllers
         [HttpGet("signin")]
         public IActionResult LoginWithUsernameAndPassword(string phone, string password)
         {
-            var found = nguoiDungLogic.CheckUserNameAndPass(phone,password);
+            var found = nguoiDungLogic.CheckUserNameAndPass(phone, password);
             if (found == null)
             {
                 return Ok(new UserLoginDataModel
@@ -242,7 +242,7 @@ namespace BookingTicket.Api.Controllers
             var check = nguoiDungLogic.DatVe(datVe);
             if (!check)
             {
-                return Ok(new { mesmessage = "fail" , TinhTrang = "Chỗ ngồi đã đặt"});
+                return Ok(new { mesmessage = "fail", TinhTrang = "Chỗ ngồi đã đặt" });
             }
             return Ok(new { mesmessage = "success" });
         }
@@ -260,6 +260,66 @@ namespace BookingTicket.Api.Controllers
                 return Ok(new { mesmessage = "fail", TinhTrang = "Co loi" });
             }
             return Ok(new { mesmessage = "success" });
+        }
+
+        [HttpPost("doimatkhau")]
+        public IActionResult DoiMatKhau(long userID, string password)
+        {
+            if (userID == 0)
+            {
+                return BadRequest();
+            }
+            var check = nguoiDungLogic.DoiMatKhau(userID, password);
+            if (!check)
+            {
+                return Ok(new { mesmessage = "fail", TinhTrang = "Khong tim thay user" });
+            }
+            return Ok(new { mesmessage = "success", TinhTrang = "Doi thanh cong" });
+        }
+
+        [HttpPost("quenmatkhau")]
+        public IActionResult QuenMatKhau(string sdt)
+        {
+            if (string.IsNullOrEmpty(sdt))
+            {
+                return BadRequest();
+            }
+            var check = nguoiDungLogic.ForgotPassword(sdt);
+            if (!check)
+            {
+                return Ok(new { message = "fail", TinhTrang = "SDT ko tim thay" });
+            }
+            return Ok(new { message = "success", TinhTrang = "Da goi Email" });
+        }
+
+        [HttpPost("checkcode")]
+        public IActionResult CheckCode(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return BadRequest();
+            }
+            var check = nguoiDungLogic.CheckCode(code);
+            if (check==0)
+            {
+                return Ok(new { message = "fail", TinhTrang = "Code het han" });
+            }
+            return Ok(new { message = "success", UserId = check });
+        }
+
+        [HttpPost("resetpassword")]
+        public IActionResult ResetPassword(long userID, string password)
+        {
+            if (string.IsNullOrEmpty(password) && userID==0)
+            {
+                return BadRequest();
+            }
+            var check = nguoiDungLogic.ResetPassword(userID,password);
+            if (!check)
+            {
+                return Ok(new { message = "fail", TinhTrang = "Khong tim thay user" });
+            }
+            return Ok(new { message = "success", TinhTrang = "ResetPassword OK" });
         }
     }
 }

@@ -25,6 +25,8 @@ namespace BookingTicket.Entities.Models
 
         public int SoLuongGhe { get; set; }
 
+        public int IsDelete { get; set; }
+
         [ForeignKey("loaiChoNgoi")]
         [JsonProperty("loaiCho")]
         public long loaiChoNgoi { get; set; }
