@@ -21,9 +21,9 @@
                             </button>
                         </div>
                         <div style="float:right;">
-                            @using (Html.BeginForm("Index", "TuyenXe", FormMethod.Post))
+                            @using (Html.BeginForm("Index", "TuyenXe", FormMethod.Post, new { id = "searchform" }))
                             {
-                                <input type="text" id="searchString" name="searchString" placeholder="Tìm kiếm" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
+                                <input type="text" id="searchString" name="searchString" placeholder="Tên tuyến" value="@ViewBag.searchString" class="form-control" style="width: auto; display: inline-block" />
                                 <button type="submit" id="btnTimKiem" class="btn btn-default">
                                     <span class="glyphicon glyphicon-search"></span> Search
                                 </button>
@@ -312,7 +312,7 @@
 
                 return valid;
             });
-        
+
         });
     </script>
 }

@@ -38,7 +38,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
                 page = 1;
             }
             ViewBag.searchString = searchString;
-            var nguoidung = _context.NguoiDungs.ToList();
+            var nguoidung = _context.NguoiDungs.OrderByDescending(e => e.UserID).ToList();
             if (!String.IsNullOrEmpty(searchString))
             {
                 nguoidung = nguoidung.Where(s => s.SDT.Contains(searchString) || s.HoTen?.Contains(searchString) == true).ToList();

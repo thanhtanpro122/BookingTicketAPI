@@ -25,7 +25,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
         public IActionResult Index(string searchString, int? page)
         {
-            var thongtindatchos = _context.ThongTinDatChos.ToList();
+            var thongtindatchos = _context.ThongTinDatChos.OrderByDescending(e => e.MaDatCho).ToList();
             if (searchString != null)
             {
                 page = 1;
@@ -131,7 +131,6 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
                         MaDieuHanh = ve.ChoNgoi.MaDieuHanh,
                         ViTriChoNgoi = ve.ChoNgoi.ViTriChoNgoi,
                         MaVe = ve.MaVe
-
                     });
                 }
             }
@@ -139,7 +138,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
         public IActionResult GetDSChoNgoi(long id, long dieuhanh)
         {
-            var listChoNgoi = _context.ChoNgois.Where(e => e.MaDieuHanh == dieuhanh).ToList();
+            var listChoNgoi = _context.ChoNgois.Where(e => e.MaDieuHanh == dieuhanh).OrderBy(e => e.ViTriChoNgoi).ToList();
 
             var stop = listChoNgoi.Count / 10;
             var tableChoNgoi = new List<List<ChoNgoi>>();

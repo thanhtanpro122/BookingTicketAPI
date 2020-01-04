@@ -35,6 +35,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
             var xe = _context.Xes
                 .Include(e => e.LoaiChoNgoi)
                 .Where(e=>e.IsDelete==0)
+                .OrderByDescending(e => e.MaXe)
                 .ToList();
             if (!String.IsNullOrEmpty(searchString))
             {

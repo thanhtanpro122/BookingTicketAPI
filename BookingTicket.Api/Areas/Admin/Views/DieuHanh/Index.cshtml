@@ -35,7 +35,7 @@
                             </a>
                         </div>
                         <div style="float:right;">
-                            @using (Html.BeginForm("Index", "DieuHanh", FormMethod.Post))
+                            @using (Html.BeginForm("Index", "DieuHanh", FormMethod.Post, new { id = "searchform" }))
                             {
                                 <input type="text" id="tuyenxe" name="tuyenxe" placeholder="Tuyến xe" class="form-control" style="width: auto; display: inline-block" />
                                 <input type="text" id="matuyenxe" name="matuyenxe" hidden />
@@ -54,7 +54,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            @*<th>Mã điều hành</th>*@
+                            <th>ID</th>
                             <th>Ngày khởi hành</th>
                             <th>Tuyến xe</th>
                             <th>Thời gian chạy</th>
@@ -73,7 +73,7 @@
                             var thoigian = item.ThoiGianKhoiHanh + "-" + item.ThoiGianKetThuc;
 
                             <tr>
-                                @*<td>@item.MaDieuHanh</td>*@
+                                <td>@item.MaDieuHanh</td>
                                 <td>@item.NgayKhoiHanh.ToString("dd/MM/yyyy")</td>
                                 <td>@tuyen</td>
                                 <td>@thoigian</td>
@@ -250,7 +250,6 @@
 
                     </div>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -299,6 +298,7 @@
                             return false;
                         }
                     }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
+
                     $("#tuyenxe-create").autocomplete({
                         source: tuyenxe.map(r => r.name),
                         select: function (event, ui) {
@@ -311,6 +311,7 @@
                             return false;
                         }
                     }).on('focus', () => { $('.ui-autocomplete').addClass('ui-front') }).on('blur', () => { $('.ui-autocomplete').removeClass('ui-front') });
+
                     $("#tuyenxe-edit").autocomplete({
                         source: tuyenxe.map(r => r.name),
                         select: function (event, ui) {
@@ -470,13 +471,7 @@
                 dateFormat: 'yy-mm-dd',//check change
                 changeMonth: true,
                 changeYear: true
-            });
-            $("#validate_xe-edit").datepicker({
-                dateFormat: 'yy-mm-dd',//check change
-                changeMonth: true,
-                changeYear: true
-            });
-
+            });     
 
             $("#create-dieuhanh-form").submit(() => {
                 $("#validate_ngaykhoihanh").html("");
@@ -533,6 +528,12 @@
                 }
 
                 return valid;
+            });           
+
+            $("#ngaykhoihanh").datepicker({
+                dateFormat: 'yy-mm-dd',//check change
+                changeMonth: true,
+                changeYear: true
             });
         });
     </script>

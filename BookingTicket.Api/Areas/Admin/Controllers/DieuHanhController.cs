@@ -74,14 +74,14 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
         public JsonResult GetListTuyenXe(string name)
         {
-            var tuyenxe = _context.TuyenXes.ToList();
+            var tuyenxe = _context.TuyenXes.Where(e => e.IsDelete == 0).ToList();
             return Json(tuyenxe);
         }
         public JsonResult GetListXe()
         {
             try
             {
-                var xe = _context.Xes.ToList();
+                var xe = _context.Xes.Where(e => e.IsDelete == 0).ToList();
                 return Json(xe);
             }
             catch (Exception ex)
@@ -177,7 +177,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
             _context.ChoNgois.AddRange(listGhe);
 
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(long? id)

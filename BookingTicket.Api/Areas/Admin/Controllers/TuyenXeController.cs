@@ -22,7 +22,7 @@ namespace BookingTicket.Api.Areas.Admin.Controllers
         }
         public IActionResult Index(string searchString, int? page)
         {
-            var tuyenxes = _context.TuyenXes.Where(e=>e.IsDelete==0).ToList();
+            var tuyenxes = _context.TuyenXes.Where(e=>e.IsDelete==0).OrderByDescending(e => e.MaTuyenXe).ToList();
             if (searchString != null)
             {
                 page = 1;

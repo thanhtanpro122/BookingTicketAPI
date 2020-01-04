@@ -81,7 +81,9 @@ namespace BookingTicket.Logic
                     TinhTrang = e.TinhTrang,
                     Vitri = e.ViTriChoNgoi,
                     MaDieuHanh = e.MaDieuHanh ?? -1
-                }).ToList();
+                })
+                .OrderBy(e=>e.Vitri)
+                .ToList();
             return choNgois;
         }
 
